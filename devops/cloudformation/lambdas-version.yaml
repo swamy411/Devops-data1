@@ -93,6 +93,68 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <lambda-B-s3-version>
+      
+  #Function-C
+  LambdaCFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: Lambda C function 
+      FunctionName: lambdaC
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/lambda-C.zip
+        S3ObjectVersion: <lambda-C-s3-version>
+      Handler: index.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 3
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: LambdaC-Function 
+  LambdaCLambdaVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: LambdaCFunction
+      Environment: 
+        Ref: Environment    
+      Nonce: <lambda-C-s3-version>
+  
+  #Function-D
+  LambdaDFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: Lambda D function 
+      FunctionName: lambdaD
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/lambda-D.zip
+        S3ObjectVersion: <lambda-D-s3-version>
+      Handler: index.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 3
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: LambdaD-Function 
+  LambdaDLambdaVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: LambdaDFunction
+      Environment: 
+        Ref: Environment    
+      Nonce: <lambda-D-s3-version> 
 
   # Version Publish Function
   LambdaVersion:
