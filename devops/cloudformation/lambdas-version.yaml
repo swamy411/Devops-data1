@@ -2,7 +2,7 @@
 Parameters:
   S3Bucket:
     Type: String
-    Default: "projectx-lambdas"
+    Default: "lambdatesting8"
   Environment:
     Type: String
     Default: "DEV"
