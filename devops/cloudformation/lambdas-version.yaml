@@ -1,0 +1,166 @@
+#Parameter Configuration Required to deploy Lambdas:
+Parameters:
+  S3Bucket:
+    Type: String
+    Default: "projectx-lambdas"
+  Environment:
+    Type: String
+    Default: "DEV"
+
+Resources:
+  #IAM Role Required for Lambdas to function Properly
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:     
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: PublishVersion
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action: ['lambda:PublishVersion', 'lambda:CreateAlias', 'lambda:GetAlias', 'lambda:ListAliases', 'lambda:UpdateAlias']
+              Resource: '*'
+  #Function-A
+  LambdaAFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: Lambda A function 
+      FunctionName: lambdaA
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/lambda-A.zip
+        S3ObjectVersion: <lambda-A-s3-version>
+      Handler: index.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 3
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: LambdaA-Function 
+  LambdaALambdaVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: LambdaAFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <lambda-A-s3-version>
+
+  # Lambda B Function
+  LambdaBFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: Lambda B function 
+      FunctionName: lambdaB
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/lambda-B.zip
+        S3ObjectVersion: <lambda-B-s3-version>
+      Handler: index.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 3
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: LambdaB-Function 
+  LambdaBLambdaVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: LambdaBFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <lambda-B-s3-version>
+
+  # Version Publish Function
+  LambdaVersion:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: "index.handler"
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Runtime: nodejs12.x
+      Code:
+        ZipFile: 
+          Fn::Sub: |
+            var AWS = require('aws-sdk');
+            var response = require('cfn-response');
+            exports.handler = (event, context) => {
+              console.log("Request received:\n", JSON.stringify(event));
+              if (event.RequestType == 'Delete') {
+                return response.send(event, context, response.SUCCESS);
+              }
+              // Lambda Versioning
+              var lambda = new AWS.Lambda();
+              console.log("Before Lambda Version Execution")
+              var params = { FunctionName: event.ResourceProperties.FunctionName};
+              // [INFO: Publish Version]
+              lambda.publishVersion(params).promise().then((data) => {
+                console.log("Data:\n", JSON.stringify(data));
+                // Lambda Alias
+                /*
+                1. List All the Aliases Associated with the Function 
+                2. Check If the Alias Already Exists !
+                3. Create New Alias
+                */
+                lambda.listAliases(params, function(err, list_alias_data) {
+                  if (err) console.log(err, err.stack); 
+                  else {
+                    console.log(list_alias_data);
+                    // 2 . Check If alias Found 
+                    alias_found=false;
+                    if (list_alias_data && list_alias_data.Aliases) {
+                      for (var k in list_alias_data.Aliases) {
+                        if (list_alias_data.Aliases[k].Name == event.ResourceProperties.Environment) {
+                          alias_found=true;  
+                          break;
+                        }
+                      }
+                    } 
+                    var alias_params = {
+                      FunctionName: event.ResourceProperties.FunctionName,
+                      FunctionVersion: data.Version,
+                      Name: event.ResourceProperties.Environment
+                    };
+                    if (alias_found) 
+                      lambda.updateAlias(alias_params, function(err, aliasdata) {
+                        if (err) console.log(err, err.stack);
+                        else     console.log(aliasdata);
+                        return response.send(event, context, response.SUCCESS, {Version: data.Version}, data.FunctionArn);
+                      });
+                    else
+                      //create alias
+                      lambda.createAlias(alias_params, function(err, aliasdata) {
+                        if (err) console.log(err, err.stack);
+                        else     console.log(aliasdata);
+                        return response.send(event, context, response.SUCCESS, {Version: data.Version}, data.FunctionArn);
+                      });
+                  }
+                });
+              }).catch((e) => {
+                return response.send(event, context, response.FAILED, e);
+              });
+            };
+
