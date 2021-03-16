@@ -100,7 +100,7 @@ Resources:
     DependsOn: LambdaRole
     Properties:
       Description: Lambda C function 
-      FunctionName: lambdaC
+      FunctionName: lambdanew
       Code:
         S3Bucket:
           Ref: S3Bucket
