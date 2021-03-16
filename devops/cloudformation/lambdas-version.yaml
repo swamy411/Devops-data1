@@ -120,7 +120,7 @@ Resources:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: lambdanew
+        Ref: LambdaCfunction
       Environment: 
         Ref: Environment    
       Nonce: <lambda-C-s3-version>
