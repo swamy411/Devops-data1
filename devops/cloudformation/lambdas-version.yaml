@@ -100,7 +100,7 @@ Resources:
     DependsOn: LambdaRole
     Properties:
       Description: Lambda C function 
-      FunctionName: lambdalatest
+      FunctionName: lambdaC
       Code:
         S3Bucket:
           Ref: S3Bucket
