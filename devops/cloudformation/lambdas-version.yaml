@@ -5,7 +5,7 @@ Parameters:
     Default: "lambdatesting8"
   Environment:
     Type: String
-    Default: "DEV"
+    Default: "UAT"
 
 Resources:
   #IAM Role Required for Lambdas to function Properly
