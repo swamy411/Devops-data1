@@ -38,7 +38,7 @@ Resources:
     DependsOn: LambdaRole
     Properties:
       Description: Lambda A function 
-      FunctionName: lambdaA
+      FunctionName: lambdanew
       Code:
         S3Bucket:
           Ref: S3Bucket
