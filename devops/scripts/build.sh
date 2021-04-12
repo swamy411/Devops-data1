@@ -27,13 +27,10 @@ fi
 
 echo "Build All Lambdas ? ${build_all_lambdas}"
 
-cd "${CI_PROJECT_DIR}" || exit
-TEST=$( ls -d )
-echo "LIST CI DIR---: ${TEST}"
-
 compile_lambdas() {
     src_path=( $@ )
     echo "Project Directory---: ${CI_PROJECT_DIR}"
+    echo "SRC PATH : ${src_path}"
     cd "${CI_PROJECT_DIR}/lambda_functions" || exit
     for folder in ${src_path[@]}; 
     do 
