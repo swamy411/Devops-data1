@@ -26,7 +26,8 @@ if [ "${OPERATION}" == "create" ]; then
 fi
 
 echo "Build All Lambdas ? ${build_all_lambdas}"
-
+TEST=$( ls -d  ${CI_PROJECT_DIR})
+echo "LIST CI DIR---: ${TEST}"
 compile_lambdas() {
     src_path=( $@ )
     echo "Project Directory---: ${CI_PROJECT_DIR}"
