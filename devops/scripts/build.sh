@@ -29,7 +29,6 @@ echo "Build All Lambdas ? ${build_all_lambdas}"
 
 compile_lambdas() {
     src_path=( $@ )
-    echo "Project Directory---: ${CI_PROJECT_DIR}"
     echo "SRC PATH : ${src_path}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
@@ -37,17 +36,17 @@ compile_lambdas() {
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
             continue
         fi
-        echo "Folder Name :--- ${folder}"
-        cd "${CI_PROJECT_DIR}/lambda_functions/$folder" || exit
+        echo "Folder Name : ${folder}"
+        cd "${CI_PROJECT_DIR}/$folder" || exit
         echo "Packaging Lambda Artifacts"
-        mkdir -p "${CI_PROJECT_DIR}/lambda_functions/artifacts/lambdas"
-        zip -r -j "${CI_PROJECT_DIR}/lambda_functions/artifacts/lambdas/${folder}.zip" .
+        mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
+        zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
     done;
 }
 
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+    cd "${CI_PROJECT_DIR}" || exit
     LAMBDAS=$( ls -d dev_* )
     compile_lambdas "${LAMBDAS[@]}"
 else
