@@ -64,6 +64,37 @@ Resources:
         Ref: Environment
       Nonce: <dev_CognitoPreSignupConfirmation-s3-version>
 
+    #Function-ClearExistingExportZip
+  devClearExistingExportZip:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev cognitoPreSignupConfirmation function 
+      FunctionName: dev_ClearExistingExportZip
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_ClearExistingExportZip.zip
+        S3ObjectVersion: <dev_ClearExistingExportZip-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1664
+      Timeout: 600
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devClearExistingExportZip-Function
+  devClearExistingExportZipVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devClearExistingExportZip
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_ClearExistingExportZip-s3-version>
+
   # Version Publish Function
   LambdaVersion:
     Type: AWS::Lambda::Function
