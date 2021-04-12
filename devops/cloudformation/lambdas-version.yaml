@@ -59,7 +59,7 @@ Resources:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: LambdaAFunction
+        Ref: dev_CognitoPreSignupConfirmation
       Environment: 
         Ref: Environment
       Nonce: <dev_CognitoPreSignupConfirmation-s3-version>
