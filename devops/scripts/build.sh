@@ -29,12 +29,14 @@ echo "Build All Lambdas ? ${build_all_lambdas}"
 
 compile_lambdas() {
     src_path=( $@ )
+    echo "Project Directory---: ${CI_PROJECT_DIR}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
             continue
         fi
+        echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/$folder" || exit
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
