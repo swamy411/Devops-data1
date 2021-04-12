@@ -32,18 +32,19 @@ Resources:
             - Effect: Allow
               Action: ['lambda:PublishVersion', 'lambda:CreateAlias', 'lambda:GetAlias', 'lambda:ListAliases', 'lambda:UpdateAlias']
               Resource: '*'
-  #Function-A
-  LambdaAFunction:
+  
+  #Function-CognitoPreSignupConfirmation
+  devCognitoPreSignupConfirmation:
     Type: 'AWS::Lambda::Function'
     DependsOn: LambdaRole
     Properties:
-      Description: Lambda A function 
-      FunctionName: lambda-A
+      Description: dev cognitoPreSignupConfirmation function 
+      FunctionName: dev_CognitoPreSignupConfirmation
       Code:
         S3Bucket:
           Ref: S3Bucket
-        S3Key: lambdas/lambda-A.zip
-        S3ObjectVersion: <lambda-A-s3-version>
+        S3Key: lambdas/dev_CognitoPreSignupConfirmation.zip
+        S3ObjectVersion: <dev_CognitoPreSignupConfirmation-s3-version>
       Handler: index.handler
       Runtime: nodejs14.x
       MemorySize: 128
@@ -51,7 +52,7 @@ Resources:
       Role:
         Fn::GetAtt: [LambdaRole, Arn]
 
-  #Version: LambdaA-Function 
+  #Version: devCognitoPreSignupConfirmation-Function
   LambdaALambdaVersion:
     Type: Custom::LambdaVersion
     Properties:
@@ -61,100 +62,7 @@ Resources:
         Ref: LambdaAFunction
       Environment: 
         Ref: Environment
-      Nonce: <lambda-A-s3-version>
-
-  # Lambda B Function
-  LambdaBFunction:
-    Type: 'AWS::Lambda::Function'
-    DependsOn: LambdaRole
-    Properties:
-      Description: Lambda B function 
-      FunctionName: lambda-B
-      Code:
-        S3Bucket:
-          Ref: S3Bucket
-        S3Key: lambdas/lambda-B.zip
-        S3ObjectVersion: <lambda-B-s3-version>
-      Handler: index.handler
-      Runtime: nodejs14.x
-      MemorySize: 128
-      Timeout: 3
-      Role:
-        Fn::GetAtt: [LambdaRole, Arn]
-
-  #Version: LambdaB-Function 
-  LambdaBLambdaVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: LambdaBFunction
-      Environment: 
-        Ref: Environment
-      Nonce: <lambda-B-s3-version>
-      
-  #Function-C
-  LambdaCFunction:
-    Type: 'AWS::Lambda::Function'
-    DependsOn: LambdaRole
-    Properties:
-      Description: Lambda C function 
-      FunctionName: lambda-C
-      Code:
-        S3Bucket:
-          Ref: S3Bucket
-        S3Key: lambdas/lambda-C.zip
-        S3ObjectVersion: <lambda-C-s3-version>
-      Handler: index.handler
-      Runtime: nodejs14.x
-      MemorySize: 128
-      Timeout: 3
-      Role:
-        Fn::GetAtt: [LambdaRole, Arn]
-
-  #Version: LambdaC-Function 
-  LambdaCLambdaVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: LambdaCFunction
-      Environment: 
-        Ref: Environment    
-      Nonce: <lambda-C-s3-version>
-  
-  #Function-D
-  LambdaDFunction:
-    Type: 'AWS::Lambda::Function'
-    DependsOn: LambdaRole
-    Properties:
-      Description: Lambda D function 
-      FunctionName: lambda-D
-      Code:
-        S3Bucket:
-          Ref: S3Bucket
-        S3Key: lambdas/lambda-D.zip
-        S3ObjectVersion: <lambda-D-s3-version>
-      Handler: index.handler
-      Runtime: nodejs14.x
-      MemorySize: 128
-      Timeout: 3
-      Role:
-        Fn::GetAtt: [LambdaRole, Arn]
-
-  #Version: LambdaD-Function 
-  LambdaDLambdaVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: LambdaDFunction
-      Environment: 
-        Ref: Environment    
-      Nonce: <lambda-D-s3-version> 
+      Nonce: <dev_CognitoPreSignupConfirmation-s3-version>
 
   # Version Publish Function
   LambdaVersion:

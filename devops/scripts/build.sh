@@ -3,6 +3,7 @@
 #INPUTS
 CI_PROJECT_DIR=$1
 COMMIT_SHA=$( git rev-parse HEAD )
+STAGE=$(dev)
 
 #DEFAULTS
 #Ignore Other Folders to Ignore During Build.
@@ -44,7 +45,7 @@ compile_lambdas() {
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
     cd "${CI_PROJECT_DIR}" || exit
-    LAMBDAS=$( ls -d lambda-* )
+    LAMBDAS=$( ls -d ${STAGE}_* )
     compile_lambdas "${LAMBDAS[@]}"
 else
     echo "Compiling below lambdas: ${affected_folders[*]}"
