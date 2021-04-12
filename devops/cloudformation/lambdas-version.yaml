@@ -53,13 +53,13 @@ Resources:
         Fn::GetAtt: [LambdaRole, Arn]
 
   #Version: devCognitoPreSignupConfirmation-Function
-  LambdaALambdaVersion:
+  devCognitoPreSignupConfirmationVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: dev_CognitoPreSignupConfirmation
+        Ref: devCognitoPreSignupConfirmation
       Environment: 
         Ref: Environment
       Nonce: <dev_CognitoPreSignupConfirmation-s3-version>
