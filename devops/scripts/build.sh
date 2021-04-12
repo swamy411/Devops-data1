@@ -29,6 +29,8 @@ echo "Build All Lambdas ? ${build_all_lambdas}"
 
 compile_lambdas() {
     src_path=( $@ )
+    echo "Project Directory---: ${CI_PROJECT_DIR}"
+    echo "SRC PATH : ${src_path}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
