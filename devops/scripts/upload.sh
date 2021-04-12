@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CI_PROJECT_DIR=$1
-STAGE=$(dev)
+
 echo "S3 Bucket Name: ${S3_BUCKET}"
 
 # #Upload Artifacts to S3
@@ -15,7 +15,7 @@ cp -f "${CI_PROJECT_DIR}/devops/cloudformation/lambdas-version.yaml" "${CI_PROJE
 cd "${CI_PROJECT_DIR}" || exit
 
 #lambdas_list=$( ls -d */ | grep "lambda-" | cut -d / -f1 )
-lambdas_list=$( ls -d ${STAGE}_-* )
+lambdas_list=$( ls -d dev_* )
 for lambda in ${lambdas_list[@]};
 do
     VERSION_ID=$(aws s3api put-object-tagging --bucket "${S3_BUCKET}" --key "lambdas/${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
