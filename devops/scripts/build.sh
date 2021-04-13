@@ -11,6 +11,7 @@ ignore_list=("devops")
 
 # #Identify the Affected Lambdas
 mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f1 | uniq )
+echo "Lines Value---: ${lines}"
 affected_folders=("$(printf '%s\n' "${lines[@]}" | sort -r)")
 echo "Affected Folders : ${affected_folders[*]}"
 
@@ -31,8 +32,7 @@ compile_lambdas() {
     src_path=( $@ )
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
-    DIR="$( cd -P "$( "${CI_PROJECT_DIR}/lambda_functions" )" >/dev/null 2>&1 && pwd )" 
-    echo "DIR :--- ${DIR}"
+echo "CI_PROJECT_DIR ---: ${CI_PROJECT_DIR}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
