@@ -13,6 +13,7 @@ cp -f "${CI_PROJECT_DIR}/devops/cloudformation/lambdas-version.yaml" "${CI_PROJE
 
 # Update Lambda S3 Version in CF Template
 cd "${CI_PROJECT_DIR}" || exit
+echo "uploading script-.--............"
 echo $(pwd)
 echo $(ls)
 #lambdas_list=$( ls -d */ | grep "lambda-" | cut -d / -f1 )
