@@ -60,7 +60,7 @@ function getParameterFromSystemManager() {
             if (err) {// an error occurred
                 reject(false);
             }
-            else {// successful response
+            else {// successful response here
                 let dataEnv = data.Parameters ? data.Parameters : [];
                 let env = {};
                 dataEnv.forEach((eachItem) => {
