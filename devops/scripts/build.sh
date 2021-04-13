@@ -32,17 +32,16 @@ compile_lambdas() {
     src_path=( $@ )
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
-    ListDir=$(ls ${CI_PROJECT_DIR}/${src_path[@]})
+    ListDir=$(ls ${CI_PROJECT_DIR}/${src_path[@]}/dev-lambdas)
     echo "List Dir:-- ${ListDir[@]}"
-    echo "CI_PROJECT_DIR ---: ${CI_PROJECT_DIR}"
     cd "${CI_PROJECT_DIR}" || exit
-    for folder in ${src_path[@]}; 
+    for folder in ${ListDir[@]}; 
     do 
-        echo "FOLDERS :--- ${folder[@]}"
+        echo "Folder Name : ${folder}"
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
             continue
         fi
-        echo "Folder Name : ${folder}"
+
         cd "${CI_PROJECT_DIR}/$folder" || exit
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
