@@ -31,7 +31,9 @@ compile_lambdas() {
     src_path=( $@ )
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
-    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+    DIR="$( cd -P "$( "${CI_PROJECT_DIR}/lambda_functions" )" >/dev/null 2>&1 && pwd )" 
+    echo "DIR :--- ${DIR}"
+    cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
