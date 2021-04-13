@@ -10,7 +10,7 @@ COMMIT_SHA=$( git rev-parse HEAD )
 ignore_list=("devops")
 
 # #Identify the Affected Lambdas
-mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f1 | uniq )
+mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f3 | uniq )
 echo "Lines Value---: ${lines}"
 
 affected_folders=("$(printf '%s\n' "${lines[@]}" | sort -r)")
@@ -33,6 +33,7 @@ compile_lambdas() {
     src_path=( $@ )
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
+    echo $(pwd)
     ListDir=$(ls ${CI_PROJECT_DIR}/${src_path[@]}/dev-lambdas)
     echo "List Dir:-- ${ListDir[@]}"
     cd "${CI_PROJECT_DIR}" || exit
