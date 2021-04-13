@@ -29,8 +29,9 @@ echo "Build All Lambdas ? ${build_all_lambdas}"
 
 compile_lambdas() {
     src_path=( $@ )
-    echo "SRC PATH : ${src_path}"
-    cd "${CI_PROJECT_DIR}" || exit
+    echo $@
+    echo "SRC PATH @ : ${src_path[@]}"
+    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
     for folder in ${src_path[@]}; 
     do 
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
@@ -46,8 +47,9 @@ compile_lambdas() {
 
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}" || exit
+    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
     LAMBDAS=$( ls -d dev_* )
+    echo "Lambdas :---  ${LAMBDAS}"
     compile_lambdas "${LAMBDAS[@]}"
 else
     echo "Compiling below lambdas: ${affected_folders[*]}"
