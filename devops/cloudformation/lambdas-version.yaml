@@ -45,7 +45,7 @@ Resources:
           Ref: S3Bucket
         S3Key: lambdas/dev_CognitoPreSignupConfirmation.zip
         S3ObjectVersion: <dev_CognitoPreSignupConfirmation-s3-version>
-      Handler: lambdas/index.handler
+      Handler: index.handler
       Runtime: nodejs10.x
       MemorySize: 1024
       Timeout: 300
@@ -76,7 +76,7 @@ Resources:
           Ref: S3Bucket
         S3Key: lambdas/dev_ClearExistingExportZip.zip
         S3ObjectVersion: <dev_ClearExistingExportZip-s3-version>
-      Handler: lambdas/index.handler
+      Handler: index.handler
       Runtime: nodejs10.x
       MemorySize: 1664
       Timeout: 600
