@@ -10,9 +10,17 @@ COMMIT_SHA=$( git rev-parse HEAD )
 ignore_list=("devops")
 
 # #Identify the Affected Lambdas
+
 mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f3 | uniq )
+
+# mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | tr "/" " "| uniq )
+
 echo "Lines Value---: ${lines}"
 
+# for dir_line in ${lines[@]}; 
+#     do 
+#         lines[
+#     done
 affected_folders=("$(printf '%s\n' "${lines[@]}" | sort -r)")
 echo "Affected Folders : ${affected_folders[*]}"
 
@@ -43,7 +51,7 @@ compile_lambdas() {
             continue
         fi
         echo "Folder Name :--- ${folder}"
-        cd "${CI_PROJECT_DIR}/$folder" || exit
+        cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
