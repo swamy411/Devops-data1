@@ -2,7 +2,7 @@
 Parameters:
   S3Bucket:
     Type: String
-    Default: "lambdatesting8"
+    Default: "devops-test-sujit"
   Environment:
     Type: String
     Default: "DEV"
