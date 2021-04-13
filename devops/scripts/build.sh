@@ -51,8 +51,9 @@ compile_lambdas() {
 }
 
 if [ "$build_all_lambdas" = true ] ; then
-    echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+    echo 'Building All Lambdas...'
+    echo $(pwd)
+    cd "${CI_PROJECT_DIR}/${src_path[@]}/dev-lambdas" || exit
     LAMBDAS=$( ls -d dev_* )
     echo "Lambdas :---  ${LAMBDAS}"
     compile_lambdas "${LAMBDAS[@]}"
