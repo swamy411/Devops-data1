@@ -36,6 +36,7 @@ echo "CI_PROJECT_DIR ---: ${CI_PROJECT_DIR}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
+        echo "FOLDERS :--- ${folder[@]}"
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
             continue
         fi
