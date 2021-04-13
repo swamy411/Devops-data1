@@ -33,7 +33,7 @@ compile_lambdas() {
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
     ListDir=$(ls -d ${CI_PROJECT_DIR}/${src_path[@]})
-    echo "List Dir:-- ${ListDir}"
+    echo "List Dir:-- ${ListDir[@]}"
     echo "CI_PROJECT_DIR ---: ${CI_PROJECT_DIR}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
