@@ -17,7 +17,7 @@ mapfile -t new_lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_S
 # mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | tr "/" " "| uniq )
 
 echo "New Lines.......${new_lines}"
-echo "Lines Value---: ${lines}"
+# echo "Lines Value---: ${lines}"
 
 # for dir_line in ${lines[@]}; 
 #     do 
