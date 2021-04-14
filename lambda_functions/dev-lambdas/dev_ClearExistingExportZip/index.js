@@ -22,7 +22,7 @@ exports.handler = (event) => {
             } else {
 
                 if (data['Contents'] != undefined) {
-                    data['Contents'].forEach((value, index) => {
+                    data['Contents'].forEach((value, index) =>{
                         console.log(index + ' ' + value['Key']);
 
                         var params = {
