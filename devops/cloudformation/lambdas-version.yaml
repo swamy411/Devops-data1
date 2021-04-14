@@ -2,7 +2,7 @@
 Parameters:
   S3Bucket:
     Type: String
-    Default: "devops-test-sujit"
+    Default: "devops-test-swamy"
   Environment:
     Type: String
     Default: "DEV"
