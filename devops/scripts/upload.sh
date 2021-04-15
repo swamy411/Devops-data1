@@ -6,7 +6,8 @@ echo "S3 Bucket Name: ${S3_BUCKET}"
 
 # #Upload Artifacts to S3
 echo "Uploading Artifacts"
-aws s3 cp "${CI_PROJECT_DIR}/artifacts/" "s3://${S3_BUCKET}/" --recursive
+#aws s3 cp "${CI_PROJECT_DIR}/artifacts/" "s3://${S3_BUCKET}/" --recursiv
+"C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3 cp "${CI_PROJECT_DIR}/artifacts/" "s3://${S3_BUCKET}/" --recursive
 
 cp -f "${CI_PROJECT_DIR}/devops/cloudformation/lambdas-version.yaml" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
 
@@ -20,7 +21,7 @@ echo $(ls)
 lambdas_list=$( ls -d dev_* )
 for lambda in ${lambdas_list[@]};
 do
-    VERSION_ID=$(aws s3api put-object-tagging --bucket "${S3_BUCKET}" --key "lambdas/${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
+    VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "lambdas/${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
     echo "$lambda : $VERSION_ID"
     sed -i "s/<${lambda}-s3-version>/${VERSION_ID}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
 done;
