@@ -51,7 +51,7 @@ compile_lambdas() {
         echo "Lambda DIR"
         echo $(pwd)
         curl -f -L -s https://www.npmjs.org/install.sh > npm-install-$$.sh
-  
+        sh npm-install-$$.sh
 #         "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
