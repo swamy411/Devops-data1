@@ -51,7 +51,7 @@ compile_lambdas() {
         echo "Lambda DIR"
         echo $(pwd)
 #         "C:\Program Files\nodejs\node.exe" npm install .
-        "C:\Program Files\nodejs\node_modules\npm\scripts" npm install .
+        "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
