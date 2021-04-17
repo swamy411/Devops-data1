@@ -50,9 +50,10 @@ compile_lambdas() {
         cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
         echo "Lambda DIR"
         echo $(pwd)
-#         "C:\Windows\System32\cmd.exe" npm install --loglevel verbose .
-        "C:\Program Files\nodejs\node_modules\npm\bin" npm install .
-#         "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
+        "C:\Program Files\nodejs\node.exe"
+        npm install
+#         "C:\Program Files\nodejs\node_modules\npm\bin\npm.sh" npm install .
+        "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
