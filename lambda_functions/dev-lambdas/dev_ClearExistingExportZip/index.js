@@ -33,7 +33,7 @@ exports.handler = (event) => {
                         console.log('This object will be deleted before copy---', value['Key']);
                         s3.deleteObject(params, function (err, data) {
                             if (err) {
-                                console.log(err, err.stack); //error occurred
+                                console.log(err, err.stack); //an error occurred
                             } else {
                                 console.log('Object deleted successfully--', params.Key);
                             }
