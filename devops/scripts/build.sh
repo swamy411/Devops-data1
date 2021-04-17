@@ -48,6 +48,8 @@ compile_lambdas() {
         fi
         echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
+        echo "Lambda DIR"
+        echo $(pwd)
         "C:\Program Files\nodejs\node.exe" npm install .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
