@@ -50,8 +50,11 @@ compile_lambdas() {
         cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
         echo "Lambda DIR"
         echo $(pwd)
+        curl https://raw.githubusercontent.com/creationix/nvm/v0.17.1/install.sh | bash
+        ~/.nvm/nvm.sh
+        nvm install 12
 #         "C:\Program Files\nodejs\node.exe" npm install .
-        "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
+#         "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
