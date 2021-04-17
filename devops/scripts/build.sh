@@ -50,9 +50,8 @@ compile_lambdas() {
         cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
         echo "Lambda DIR"
         echo $(pwd)
-        curl -O https://npmjs.org/install.sh
-        sh install.sh
-        "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
+        "C:\Windows\System32\cmd.exe" npm install .
+#         "C:\Program Files\nodejs\node_modules\npm\scripts\install.sh" .
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
