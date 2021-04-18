@@ -94,6 +94,69 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <dev_ClearExistingExportZip-s3-version>
+  
+  #Function-devAddTagToPatientObjects
+  devAddTagToPatientObjects:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev AddTagToPatientObjects function 
+      FunctionName: dev_AddTagToPatientObjects
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_AddTagToPatientObjects.zip
+        S3ObjectVersion: <dev_AddTagToPatientObjects-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1024
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devAddTagToPatientObjects-Function
+  devAddTagToPatientObjectsVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devAddTagToPatientObjects
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_CloudGroupNotification-s3-version>
+
+
+  #Function-devCloudGroupNotification
+  devCloudGroupNotification:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev AddTagToPatientObjects function 
+      FunctionName: dev_CloudGroupNotification
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_CloudGroupNotification.zip
+        S3ObjectVersion: <dev_CloudGroupNotification-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 900
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devCloudGroupNotification-Function
+  devCloudGroupNotificationVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devCloudGroupNotification
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_AddTagToPatientObjects-s3-version>
 
   # Version Publish Function
   LambdaVersion:
