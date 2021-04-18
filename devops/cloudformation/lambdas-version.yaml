@@ -132,7 +132,7 @@ Resources:
     Type: 'AWS::Lambda::Function'
     DependsOn: LambdaRole
     Properties:
-      Description: dev AddTagToPatientObjects function 
+      Description: dev CloudGroupNotification function 
       FunctionName: dev_CloudGroupNotification
       Code:
         S3Bucket:
