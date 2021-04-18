@@ -124,7 +124,7 @@ Resources:
         Ref: devAddTagToPatientObjects
       Environment: 
         Ref: Environment
-      Nonce: <dev_CloudGroupNotification-s3-version>
+      Nonce: <dev_AddTagToPatientObjects-s3-version>
 
 
   #Function-devCloudGroupNotification
@@ -156,7 +156,7 @@ Resources:
         Ref: devCloudGroupNotification
       Environment: 
         Ref: Environment
-      Nonce: <dev_AddTagToPatientObjects-s3-version>
+      Nonce: <dev_CloudGroupNotification-s3-version>
 
   # Version Publish Function
   LambdaVersion:
