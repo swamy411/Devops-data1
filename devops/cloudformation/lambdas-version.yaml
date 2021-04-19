@@ -158,6 +158,68 @@ Resources:
         Ref: Environment
       Nonce: <dev_CloudGroupNotification-s3-version>
 
+  #Function-devArchiveObjectsFunction
+  devArchiveObjectsFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev ArchiveObjectsFunction function 
+      FunctionName: dev_ArchiveObjectsFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_ArchiveObjectsFunction.zip
+        S3ObjectVersion: <dev_ArchiveObjectsFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1024
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devArchiveObjectsFunction-Function
+  devArchiveObjectsFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devArchiveObjectsFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_ArchiveObjectsFunction-s3-version>
+
+  #Function-devAudioConverterFunction
+  devAudioConverterFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev AudioConverterFunction function 
+      FunctionName: dev_AudioConverterFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_AudioConverterFunction.zip
+        S3ObjectVersion: <dev_AudioConverterFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1024
+      Timeout: 90
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devAudioConverterFunction-Function
+  devAudioConverterFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devAudioConverterFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_AudioConverterFunction-s3-version>
+
   # Version Publish Function
   LambdaVersion:
     Type: AWS::Lambda::Function

@@ -1,0 +1,17 @@
+{
+  "name": "video-thumbnailer",
+  "version": "0.0.9",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "scripts": {},
+  "author": "YourNameHere",
+  "license": "Unlicensed",
+  "dependencies": {
+    "async": "^2.5.0",
+    "aws-sdk": "^2.424.0",
+    "mediainfo-wrapper": "1.2.0",
+    "request": "^2.88.0",
+    "tempy": "^0.2.1"
+  }
+}
