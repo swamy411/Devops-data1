@@ -320,7 +320,7 @@ function getParameterFromSystemManager(ssmpath) {
             Recursive: true
         };
         ssm.getParametersByPath(params, function (err, data) {
-            if (err) {// an error occurred
+            if (err) {  // an error occurred
                 reject(false);
             }
             else {// successful response
