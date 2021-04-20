@@ -6,6 +6,12 @@ Parameters:
   Environment:
     Type: String
     Default: "DEV"
+  Bucket1:
+    Type: String
+    Default: dev-addtag-bucket1
+  Bucket2:
+    Type: String
+    Default: dev-addtag-bucket2
 
 Resources:
   #IAM Role Required for Lambdas to function Properly
@@ -31,6 +37,10 @@ Resources:
             Statement:
             - Effect: Allow
               Action: ['lambda:PublishVersion', 'lambda:CreateAlias', 'lambda:GetAlias', 'lambda:ListAliases', 'lambda:UpdateAlias']
+              Resource: '*'
+            - Effect: Allow
+              Action:
+                - s3:Get*
               Resource: '*'
   
   #Function-CognitoPreSignupConfirmation
@@ -125,6 +135,42 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <dev_AddTagToPatientObjects-s3-version>
+
+  BucketEvent1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref Bucket1
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Function: !GetAtt devAddTagToPatientObjects.Arn
+
+  BucketEvent2:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref Bucket2
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Function: !GetAtt devAddTagToPatientObjects.Arn
+  
+  LambdaInvokePermission1:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt devAddTagToPatientObjects.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${Bucket1}'
+      
+  LambdaInvokePermission2:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt devAddTagToPatientObjects.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${Bucket2}'
 
 
   #Function-devCloudGroupNotification
