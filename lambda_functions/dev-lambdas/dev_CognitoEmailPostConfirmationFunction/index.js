@@ -203,7 +203,7 @@ async function sendEmail(event, to, success, message, completedCallback) {
         Message: {
             Body: {
                 // Text: {
-                //     Data: body
+                //    Data: body
                 // },
                 Html: {
                     Charset: "UTF-8",
