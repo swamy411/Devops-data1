@@ -246,7 +246,7 @@ Resources:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: dev_CognitoEmailPostConfirmationFunction
+        Ref: devCognitoEmailPostConfirmationFunction
       Environment: 
         Ref: Environment
       Nonce: <dev_CognitoEmailPostConfirmationFunction-s3-version>
