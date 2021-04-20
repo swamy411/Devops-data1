@@ -1,0 +1,22 @@
+{
+  "name": "CognitoEmailPostConfirmationFunction",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "snn"
+  },
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "CognitoEmailPostConfirmationFunction@1.0.0",
+  "_shasum": "c1ec3a483a2349efa49d27de6916d2c9780c1b23",
+  "_from": "lambda_functions\\dev-lambdas\\dev_CognitoEmailPostConfirmationFunction",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_CognitoEmailPostConfirmationFunction"
+}

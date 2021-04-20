@@ -220,6 +220,37 @@ Resources:
         Ref: Environment
       Nonce: <dev_AudioConverterFunction-s3-version>
 
+  #Function-devCognitoEmailPostConfirmationFunction
+  devCognitoEmailPostConfirmationFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev CognitoEmailPostConfirmationFunction function 
+      FunctionName: dev_CognitoEmailPostConfirmationFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_CognitoEmailPostConfirmationFunction.zip
+        S3ObjectVersion: <dev_CognitoEmailPostConfirmationFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1216
+      Timeout: 360
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devCognitoEmailPostConfirmationFunction-Function
+  devCognitoEmailPostConfirmationFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: dev_CognitoEmailPostConfirmationFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_CognitoEmailPostConfirmationFunction-s3-version>
+
   # Version Publish Function
   LambdaVersion:
     Type: AWS::Lambda::Function
