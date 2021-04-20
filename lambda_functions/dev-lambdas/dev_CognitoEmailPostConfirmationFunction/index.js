@@ -145,7 +145,7 @@ function mapUser(event, context, callback) {
     req.on('error', (e) => {
         
         // sendEmail(event, event.request.userAttributes.email, false, 'internal', (status) => {
-        //     console.log('Error Message: ' + status);
+        //    console.log('Error Message: ' + status);
         //     callback(Error('errorregistration'));
         //     // context.done(null, 'failure');
         // });
