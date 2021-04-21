@@ -408,7 +408,7 @@ Resources:
           version: 1.0.0
         paths:
           /MyResource:
-            any:
+            get:
               parameters:
                 - name: Content-Type
                   in: header
