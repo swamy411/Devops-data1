@@ -9,7 +9,7 @@ exports.handler = (event, context, callback) => {
   iss = 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_cWMNjCSVb'
   // TODO implement
   if (!pems) {
-    //Download the JWKs and save it as PEM
+    // Download the JWKs and save it as PEM
     request({
       url: iss + '/.well-known/jwks.json',
       json: true
@@ -19,7 +19,7 @@ exports.handler = (event, context, callback) => {
         pems = {};
         var keys = body['keys'];
         for (var i = 0; i < keys.length; i++) {
-          //Convert each key to PEM
+          // Convert each key to PEM
           var key_id = keys[i].kid;
           var modulus = keys[i].n;
           var exponent = keys[i].e;
