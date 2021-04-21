@@ -32,10 +32,10 @@ exports.handler = (event, context, callback) => {
           var pem = jwkToPem(jwk);
           pems[key_id] = pem;
         }
-        //Now continue with validating the token
+        // Now continue with validating the token
         validateToken(pems, event, context);
       } else {
-        //Unable to download JWKs, fail the call
+        // Unable to download JWKs, fail the call
         context.fail("error");
       }
     });
