@@ -9,12 +9,12 @@ exports.handler = (event, context, callback) => {
   iss = 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_cWMNjCSVb'
   // TODO implement
   if (!pems) {
-    // Download the JWKs and save it as PEM
+     // Download the JWKs and save it as PEM
     request({
       url: iss + '/.well-known/jwks.json',
       json: true
     }, function (error, response, body) {
-      // console.log('## error ', error, ' ## res ', response, ' #body ',body);
+       // console.log('## error ', error, ' ## res ', response, ' #body ',body);
       if (!error && response.statusCode === 200) {
         pems = {};
         var keys = body['keys'];
@@ -165,9 +165,9 @@ function validateToken(pems, event, context) {
          
         // cognitoidentityserviceprovider.getUser(cognitoAuthTokenParams, (err, data) => {
         //   if (err) {
-        //     console.log(err);
-        //     context.fail("Unauthorized"); // an error occurred
-        //     return;
+        //      console.log(err);
+        //      context.fail("Unauthorized"); // an error occurred
+        //      return;
         //   }
         //   else {
         // //     cognitoidentityserviceprovider.listDevices(params, (deviceErr, deviceData) => {
