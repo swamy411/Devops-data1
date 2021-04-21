@@ -3,6 +3,9 @@ Parameters:
   S3Bucket:
     Type: String
     Default: "devops-test-swamy1"
+  StageName:
+    Type: String
+    Default: "dev"
   Environment:
     Type: String
     Default: "DEV"
@@ -296,6 +299,158 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <dev_CognitoEmailPostConfirmationFunction-s3-version>
+
+  #Function-devCognitoSubscriptionMappingPostConfirmationFunction
+  devCognitoSubscriptionMappingPostConfirmationFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev CognitoSubscriptionMappingPostConfirmationFunction function 
+      FunctionName: dev_CognitoSubscriptionMappingPostConfirmationFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_CognitoSubscriptionMappingPostConfirmationFunction.zip
+        S3ObjectVersion: <dev_CognitoSubscriptionMappingPostConfirmationFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 512
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devCognitoSubscriptionMappingPostConfirmationFunction-Function
+  devCognitoSubscriptionMappingPostConfirmationFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devCognitoSubscriptionMappingPostConfirmationFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_CognitoSubscriptionMappingPostConfirmationFunction-s3-version>
+
+  #Function-devArchiveProcedureFunction
+  devArchiveProcedureFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev ArchiveProcedureFunction function 
+      FunctionName: dev_ArchiveProcedureFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_ArchiveProcedureFunction.zip
+        S3ObjectVersion: <dev_ArchiveProcedureFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1024
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devArchiveProcedureFunction-Function
+  devArchiveProcedureFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devArchiveProcedureFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_ArchiveProcedureFunction-s3-version>
+
+  #Function-devArchiveProcedureProcedureID
+  devArchiveProcedureProcedureID:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev ArchiveProcedureProcedureID function 
+      FunctionName: dev_ArchiveProcedure__ProcedureID
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_ArchiveProcedure__ProcedureID.zip
+        S3ObjectVersion: <dev_ArchiveProcedure__ProcedureID-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 900
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devArchiveProcedureProcedureID-Function
+  devArchiveProcedureProcedureIDVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devArchiveProcedureProcedureID
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_ArchiveProcedure__ProcedureID-s3-version>
+  
+  # Create API Gateway API
+  ApiGatewayRestApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Name: !Sub ${StageName}-${AWS::StackName}
+      EndpointConfiguration:
+        Types:
+          - REGIONAL 
+      Body:
+        openapi: 3.0.0
+        info:
+          title: !Sub ${AWS::StackName} API
+          version: 1.0.0
+        paths:
+          /MyResource:
+            any:
+              parameters:
+                - name: Content-Type
+                  in: header
+                  schema:
+                    type: string
+              x-amazon-apigateway-integration:
+                type: AWS_PROXY
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${devArchiveProcedureProcedureID.Arn}/invocations
+                httpMethod: POST
+                requestParameters: {}
+                credentials: !GetAtt ApiInvokeFunctionRole.Arn
+              responses: 
+                "200":
+                  description: Success
+  # Deploy current API version to a stage with name of the environment   
+  ApiGatewayRestApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties: 
+      Description: ApiGatewayRestApi Deployment
+      RestApiId: !Ref ApiGatewayRestApi
+      StageName: !Ref StageName
+  # Role which enables the API to call all Lambda functions
+  ApiInvokeFunctionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service: "apigateway.amazonaws.com"
+          Action: "sts:AssumeRole"
+      Policies:
+      - PolicyName: ApiInvokeFunctionRolePolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - "lambda:InvokeFunction"
+            Resource:
+            - !GetAtt devArchiveProcedureProcedureID.Arn
 
   # Version Publish Function
   LambdaVersion:
