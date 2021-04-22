@@ -9,17 +9,17 @@ exports.handler = (event, context, callback) => {
   iss = 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_cWMNjCSVb'
   // TODO implement
   if (!pems) {
-    //Download the JWKs and save it as PEM
+     // Download the JWKs and save it as PEM
     request({
       url: iss + '/.well-known/jwks.json',
       json: true
     }, function (error, response, body) {
-      // console.log('## error ', error, ' ## res ', response, ' #body ',body);
+       // console.log('## error ', error, ' ## res ', response, ' #body ',body);
       if (!error && response.statusCode === 200) {
         pems = {};
         var keys = body['keys'];
         for (var i = 0; i < keys.length; i++) {
-          //Convert each key to PEM
+          // Convert each key to PEM
           var key_id = keys[i].kid;
           var modulus = keys[i].n;
           var exponent = keys[i].e;
@@ -32,10 +32,10 @@ exports.handler = (event, context, callback) => {
           var pem = jwkToPem(jwk);
           pems[key_id] = pem;
         }
-        //Now continue with validating the token
+        // Now continue with validating the token
         validateToken(pems, event, context);
       } else {
-        //Unable to download JWKs, fail the call
+        // Unable to download JWKs, fail the call
         context.fail("error");
       }
     });
@@ -165,9 +165,9 @@ function validateToken(pems, event, context) {
          
         // cognitoidentityserviceprovider.getUser(cognitoAuthTokenParams, (err, data) => {
         //   if (err) {
-        //     console.log(err);
-        //     context.fail("Unauthorized"); // an error occurred
-        //     return;
+        //      console.log(err);
+        //      context.fail("Unauthorized"); // an error occurred
+        //      return;
         //   }
         //   else {
         // //     cognitoidentityserviceprovider.listDevices(params, (deviceErr, deviceData) => {
