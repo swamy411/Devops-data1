@@ -15,6 +15,9 @@ Parameters:
   Bucket2:
     Type: String
     Default: dev-addtag-bucket2
+  devCopyRecoveredObjectBucket:
+    Type: String
+    Default: dev-copy-recovered-object-function-bucket
 
 Resources:
   #IAM Role Required for Lambdas to function Properly
@@ -515,6 +518,55 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${devCognitoUserAttributesApiGatewayRestApi}/${StageName}/POST/
+
+  #Function-devCopyRecoveredObjectFunction
+  devCopyRecoveredObjectFunction:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev CopyRecoveredObject function 
+      FunctionName: dev_CopyRecoveredObjectFunction
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_CopyRecoveredObjectFunction.zip
+        S3ObjectVersion: <dev_CopyRecoveredObjectFunction-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 1024
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+
+  #Version: devCopyRecoveredObjectFunction-Function
+  devCopyRecoveredObjectFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devCopyRecoveredObjectFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_CopyRecoveredObjectFunction-s3-version>
+
+  devCopyRecoveredObjectBucketEvent:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref devCopyRecoveredObjectBucket
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Function: !GetAtt devCopyRecoveredObjectFunction.Arn
+  
+  devCopyRecoveredObjectInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt devCopyRecoveredObjectFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${devCopyRecoveredObjectBucket}'
   
   # Role which enables the API to call all Lambda functions
   ApiInvokeFunctionRole:
