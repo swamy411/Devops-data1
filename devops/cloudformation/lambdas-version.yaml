@@ -430,6 +430,92 @@ Resources:
       Description: ApiGatewayRestApi Deployment
       RestApiId: !Ref ApiGatewayRestApi
       StageName: !Ref StageName
+
+  #Function-devCognitoUserAttributes
+  devCognitoUserAttributes:
+    Type: 'AWS::Lambda::Function'
+    DependsOn: LambdaRole
+    Properties:
+      Description: dev CognitoUserAttributes function 
+      FunctionName: dev_CognitoUserAttributes
+      Code:
+        S3Bucket:
+          Ref: S3Bucket
+        S3Key: lambdas/dev_CognitoUserAttributes.zip
+        S3ObjectVersion: <dev_CognitoUserAttributes-s3-version>
+      Handler: index.handler
+      Runtime: nodejs10.x
+      MemorySize: 128
+      Timeout: 900
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+  
+  #Version: devCognitoUserAttributes-Function
+  devCognitoUserAttributesVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: devCognitoUserAttributes
+      Environment: 
+        Ref: Environment
+      Nonce: <dev_CognitoUserAttributes-s3-version>
+  
+  # Create API Gateway API
+  devCognitoUserAttributesApiGatewayRestApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Name: !Sub ${StageName}-${AWS::StackName}-devCognitoUserAttributes
+      EndpointConfiguration:
+        Types:
+          - REGIONAL 
+      Body:
+        openapi: 3.0.0
+        info:
+          title: !Sub ${AWS::StackName} devCognitoUserAttributes API
+          version: 1.0.0
+        paths:
+          /:
+            post:
+              x-amazon-apigateway-integration:
+                type: AWS_PROXY
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${devCognitoUserAttributes.Arn}/invocations
+                httpMethod: POST
+                requestParameters: {}
+                credentials: !GetAtt ApiInvokeFunctionRole.Arn
+              responses: 
+                "200":
+                  description: Success
+          /MyResource:
+            options:
+              x-amazon-apigateway-integration:
+                type: AWS_PROXY
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${devCognitoUserAttributes.Arn}/invocations
+                httpMethod: ANY
+                requestParameters: {}
+                credentials: !GetAtt ApiInvokeFunctionRole.Arn
+              responses: 
+                "200":
+                  description: Success
+        
+  # Deploy current API version to a stage with name of the environment   
+  devCognitoUserAttributesApiGatewayRestApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties: 
+      Description: devCognitoUserAttributesApiGatewayRestApi Deployment
+      RestApiId: !Ref devCognitoUserAttributesApiGatewayRestApi
+      StageName: !Ref StageName
+
+  devCognitoUserAttributesInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt devCognitoUserAttributes.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: apigateway.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${devCognitoUserAttributesApiGatewayRestApi}/${StageName}/POST/
+  
   # Role which enables the API to call all Lambda functions
   ApiInvokeFunctionRole:
     Type: "AWS::IAM::Role"
