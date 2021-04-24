@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: This is jenkins deployement
+#Parameter Configuration Required to deploy Lambdas:
+Parameters:
+  STAGE:
+    Type: String
+    Default: dev
+Resources:
+#IAM Role Required for Lambdas to function Properly
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:     
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: PublishVersion
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+            - Effect: Allow
+              Action: ['lambda:PublishVersion', 'lambda:CreateAlias', 'lambda:GetAlias', 'lambda:ListAliases', 'lambda:UpdateAlias']
+              Resource: '*'
+            - Effect: Allow
+              Action:
+                - s3:Get*
+              Resource: '*'
+  devAddTagToPatientObjects:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: !Sub '${STAGE}-AddTagToPatientObjects'
+      Handler: index.handler
+      Runtime: nodejs10.x
+      CodeUri: .
+      Description: This is jenkins deployement
+      MemorySize: 1024
+      Timeout: 300
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:*'
+        BucketEvent2:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket2
+            Events:
+              - 's3:ObjectCreated:*'
+      # VpcConfig:
+      #   SecurityGroupIds:
+      #     - sg-005a73d593a28e2a0
+      #   SubnetIds:
+      #     - subnet-06a08a7de749cfd7d
+      #     - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /dev/
+      Tags:
+        Environment: Dev
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+  Bucket2:
+    Type: 'AWS::S3::Bucket'
