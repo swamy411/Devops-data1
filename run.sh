@@ -25,9 +25,8 @@ mkdir build
 aws s3 mb s3://$BUCKET 
 
 # generate next stage yaml file
-"C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws cloudformation package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --output-template-file build/output.yaml --s3-bucket $BUCKET                      
-
-"C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws cloudformation deploy --template-file build/output.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM --parameter-overrides STAGE=$STAGE
+aws cloudformation package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --output-template-file build/output.yaml --s3-bucket $BUCKET                      
+aws cloudformation deploy --template-file build/output.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM --parameter-overrides STAGE=$STAGE
 
 
 
