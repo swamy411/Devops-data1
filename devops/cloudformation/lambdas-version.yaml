@@ -39,7 +39,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       FunctionName: !Sub '${STAGE}-AddTagToPatientObjects'
-      Handler: !Sub Devops-data1/lambda_functions/${STAGE}-lambdas/index.handler
+      Handler: index.handler
       Runtime: nodejs10.x
       CodeUri: .
       Description: This is jenkins deployement
