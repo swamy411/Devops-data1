@@ -7,6 +7,9 @@ WORKSPACE=$( pwd )
 
 echo "Work space :--- ${WORKSPACE}"
 
+#Ignore Other Folders to Ignore During Build.
+ignore_list=("devops")
+
 if [ -z "$STAGE" ]
 then
       echo "WARNING: \$STAGE is not defined. Setting it to dev"
