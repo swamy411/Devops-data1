@@ -25,22 +25,14 @@ mkdir build
 aws s3 mb s3://$BUCKET 
 
 # generate next stage yaml file
-# aws cloudformation package                   \
-#     --template-file $WORKSPACE/$FUNCTION_NAME/template.yaml            \
-#     --output-template-file build/output.yaml \
-#     --s3-bucket $BUCKET                      
+"C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws cloudformation package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --output-template-file build/output.yaml --s3-bucket $BUCKET                      
 
-# the actual deployment step
-# aws cloudformation deploy                     \
-#     --template-file build/output.yaml         \
-#     --stack-name $STACK_NAME                     \
-#     --capabilities CAPABILITY_IAM             \
-#     --parameter-overrides STAGE=$STAGE
+"C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws cloudformation deploy --template-file build/output.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM --parameter-overrides STAGE=$STAGE
 
 
 
 
 
-sam package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --s3-bucket $BUCKET --output-template-file build/output.yaml
+# sam package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --s3-bucket $BUCKET --output-template-file build/output.yaml
 
-sam deploy --template-file build/output.yaml --capabilities CAPABILITY_IAM --stack-name $STACK_NAME --region $REGION --parameter-overrides STAGE=$STAGE
+# sam deploy --template-file build/output.yaml --capabilities CAPABILITY_IAM --stack-name $STACK_NAME --region $REGION --parameter-overrides STAGE=$STAGE
