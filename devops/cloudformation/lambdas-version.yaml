@@ -132,15 +132,13 @@ Resources:
 
   # Version Publish Function
   LambdaVersion:
-    Type: AWS::Lambda::Function
+    Type: 'AWS::Serverless::Function'
     Properties:
       Handler: "index.handler"
       Role: 
         Fn::GetAtt: [LambdaRole, Arn]
       Runtime: nodejs10.x
-      Code:
-        ZipFile: 
-          Fn::Sub: |
+      InlineCode: |
             var AWS = require('aws-sdk');
             var response = require('cfn-response');
             exports.handler = (event, context) => {
