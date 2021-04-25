@@ -6,7 +6,7 @@ Parameters:
   STAGE:
     Type: String
     Default: dev
-  3Bucket:
+  S3Bucket:
     Type: String
     Default: "devops-test-swamy1"
   Environment:
@@ -49,7 +49,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
-        Bucket: devops-test-swamy1
+        Bucket:
+          Ref: S3Bucket
         Key: lambdas/dev_AddTagToPatientObjects.zip
         Version: <dev_AddTagToPatientObjects-s3-version>
       Description: This is jenkins deployement
@@ -109,7 +110,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
-        Bucket: devops-test-swamy1
+        Bucket: 
+          Ref: S3Bucket
         Key: lambdas/dev_CloudGroupNotification.zip
         Version: <dev_CloudGroupNotification-s3-version>
       Description: ''
