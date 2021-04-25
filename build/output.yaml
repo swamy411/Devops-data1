@@ -44,7 +44,7 @@ Resources:
       FunctionName: dev-AddTagToPatientObjects
       Handler: lambda_functions/dev-lambdas/dev_AddTagToPatientObjects/index.handler
       Runtime: nodejs10.x
-      CodeUri: s3://dev-sam-s3-deployment/c7092553e21c1696493a47df398c71f5
+      CodeUri: s3://dev-sam-s3-deployment/55ad04cd9bdb9a23360997c1dccb55b0
       Description: This is jenkins deployement
       MemorySize: 1024
       Timeout: 300
@@ -82,7 +82,7 @@ Resources:
       FunctionName: dev-CloudGroupNotification
       Handler: lambda_functions/dev-lambdas/dev_CloudGroupNotification/index.handler
       Runtime: nodejs10.x
-      CodeUri: s3://dev-sam-s3-deployment/c7092553e21c1696493a47df398c71f5
+      CodeUri: s3://dev-sam-s3-deployment/55ad04cd9bdb9a23360997c1dccb55b0
       Description: ''
       MemorySize: 128
       Timeout: 900
