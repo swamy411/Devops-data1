@@ -48,10 +48,10 @@ Resources:
       FunctionName: dev-AddTagToPatientObjects
       Handler: index.handler
       Runtime: nodejs10.x
-      CodeUri: s3://devops-test-swamy1/lambdas/dev_AddTagToPatientObjects.zip
-        # Bucket: S3Bucket
-        # Key: lambdas/dev_AddTagToPatientObjects.zip
-        # Version: <dev_AddTagToPatientObjects-s3-version>
+      CodeUri:
+        Bucket: !Ref S3Bucket
+        Key: lambdas/dev_AddTagToPatientObjects.zip
+        Version: <dev_AddTagToPatientObjects-s3-version>
       Description: This is jenkins deployement
       MemorySize: 1024
       Timeout: 300
@@ -108,10 +108,10 @@ Resources:
       FunctionName: dev-CloudGroupNotification
       Handler: index.handler
       Runtime: nodejs10.x
-      CodeUri: s3://devops-test-swamy1/lambdas/dev_CloudGroupNotification.zip
-        # Bucket: S3Bucket
-        # Key: lambdas/dev_CloudGroupNotification.zip
-        # Version: <dev_CloudGroupNotification-s3-version>
+      CodeUri:
+        Bucket: !Ref S3Bucket
+        Key: lambdas/dev_CloudGroupNotification.zip
+        Version: <dev_CloudGroupNotification-s3-version>
       Description: ''
       MemorySize: 128
       Timeout: 900
