@@ -41,11 +41,12 @@ Resources:
               Action:
                 - s3:Get*
               Resource: '*'
+
   devAddTagToPatientObjects:
     Type: 'AWS::Serverless::Function'
     Properties:
       FunctionName: dev-AddTagToPatientObjects
-      Handler: lambda_functions/dev-lambdas/dev_AddTagToPatientObjects/index.handler
+      Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
         Bucket: S3Bucket
