@@ -38,7 +38,7 @@ compile_lambdas() {
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
     echo $(pwd)
-    ListDir=$(ls ${CI_PROJECT_DIR}/lambda_functions/dev-lambdas)
+    ListDir=$(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas)
     echo "List Dir:-- ${ListDir[@]}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
@@ -47,7 +47,7 @@ compile_lambdas() {
             continue
         fi
         echo "Folder Name :--- ${folder}"
-        cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas/$folder" || exit
+        cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
 
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
@@ -58,8 +58,8 @@ compile_lambdas() {
 
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}/lambda_functions/dev-lambdas" || exit
-    LAMBDAS=$( ls -d dev_* )
+    cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit
+    LAMBDAS=$( ls -d ${STAGE}_* )
     compile_lambdas "${LAMBDAS[@]}"
 else
     echo "Compiling below lambdas: ${affected_folders[*]}"
