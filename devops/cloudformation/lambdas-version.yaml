@@ -6,6 +6,12 @@ Parameters:
   STAGE:
     Type: String
     Default: dev
+  3Bucket:
+    Type: String
+    Default: "devops-test-swamy1"
+  Environment:
+    Type: String
+    Default: "DEV"
 Resources:
 #IAM Role Required for Lambdas to function Properly
   LambdaRole:
@@ -65,17 +71,19 @@ Resources:
               Ref: Bucket2
             Events:
               - 's3:ObjectCreated:*'
+      Environment:
+        Variables:
+          ssm_store: /dev/
+      Tags:
+        Environment: Dev
       # VpcConfig:
       #   SecurityGroupIds:
       #     - sg-005a73d593a28e2a0
       #   SubnetIds:
       #     - subnet-06a08a7de749cfd7d
       #     - subnet-02f8f518e75d79ff5
-      Environment:
-        Variables:
-          ssm_store: /dev/
-      Tags:
-        Environment: Dev
+      
+
   Bucket1:
     Type: 'AWS::S3::Bucket'
   Bucket2:
@@ -108,12 +116,6 @@ Resources:
       Timeout: 900
       Role: 
         Fn::GetAtt: [LambdaRole, Arn]
-      # VpcConfig:
-      #   SecurityGroupIds:
-      #     - sg-005a73d593a28e2a0
-      #   SubnetIds:
-      #     - subnet-06a08a7de749cfd7d
-      #     - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /dev/
