@@ -42,17 +42,17 @@ Resources:
                 - s3:Get*
               Resource: '*'
 
-  devAddTagToPatientObjects:
+  ENVAddTagToPatientObjects:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: dev-AddTagToPatientObjects
+      FunctionName: ENV-AddTagToPatientObjects
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
         Bucket:
           Ref: S3Bucket
-        Key: lambdas/dev_AddTagToPatientObjects.zip
-        Version: <dev_AddTagToPatientObjects-s3-version>
+        Key: lambdas/ENV_AddTagToPatientObjects.zip
+        Version: <ENV_AddTagToPatientObjects-s3-version>
       Description: This is jenkins deployement
       MemorySize: 1024
       Timeout: 300
@@ -75,45 +75,38 @@ Resources:
               - 's3:ObjectCreated:*'
       Environment:
         Variables:
-          ssm_store: /dev/
+          ssm_store: /ENV/
       Tags:
         Environment: Dev
-      # VpcConfig:
-      #   SecurityGroupIds:
-      #     - sg-005a73d593a28e2a0
-      #   SubnetIds:
-      #     - subnet-06a08a7de749cfd7d
-      #     - subnet-02f8f518e75d79ff5
       
-
   Bucket1:
     Type: 'AWS::S3::Bucket'
   Bucket2:
     Type: 'AWS::S3::Bucket'
 
-  #Version: devAddTagToPatientObjects-Function
-  devAddTagToPatientObjectsVersion:
+  #Version: AddTagToPatientObjects-Function
+  ENVAddTagToPatientObjectsVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: devAddTagToPatientObjects
+        Ref: ENVAddTagToPatientObjects
       Environment: 
         Ref: Environment
-      Nonce: <dev_AddTagToPatientObjects-s3-version>
+      Nonce: <ENV_AddTagToPatientObjects-s3-version>
 
-  devCloudGroupNotification:
+  ENVCloudGroupNotification:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: dev-CloudGroupNotification
+      FunctionName: ENV-CloudGroupNotification
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: lambdas/dev_CloudGroupNotification.zip
-        Version: <dev_CloudGroupNotification-s3-version>
+        Key: lambdas/ENV_CloudGroupNotification.zip
+        Version: <ENV_CloudGroupNotification-s3-version>
       Description: ''
       MemorySize: 128
       Timeout: 900
@@ -121,18 +114,18 @@ Resources:
         Fn::GetAtt: [LambdaRole, Arn]
       Environment:
         Variables:
-          ssm_store: /dev/
+          ssm_store: /ENV/
 
-    devCloudGroupNotificationVersion:
+    ENVCloudGroupNotificationVersion:
       Type: Custom::LambdaVersion
       Properties:
         ServiceToken: 
           Fn::GetAtt: LambdaVersion.Arn
         FunctionName: 
-          Ref: devCloudGroupNotification
+          Ref: ENVCloudGroupNotification
         Environment: 
           Ref: Environment
-        Nonce: <dev_CloudGroupNotification-s3-version>
+        Nonce: <ENV_CloudGroupNotification-s3-version>
  
 
   # Version Publish Function

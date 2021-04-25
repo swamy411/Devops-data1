@@ -11,6 +11,7 @@ echo "Uploading Artifacts"
 
 cp -f "${CI_PROJECT_DIR}/devops/cloudformation/lambdas-version.yaml" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
 
+sed -i "s/ENV/${STAGE}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
 
 # Update Lambda S3 Version in CF Template
 echo "uploading script-.--............"
@@ -22,8 +23,10 @@ lambdas_list=$( ls -d ${STAGE}_* )
 for lambda in ${lambdas_list[@]};
 do
     VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "lambdas/${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
+    
     echo "$lambda : $VERSION_ID"
     sed -i "s/<${lambda}-s3-version>/${VERSION_ID}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
+    
 done;
 
 # echo "Uploading cloudformation files"
