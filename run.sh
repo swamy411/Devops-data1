@@ -25,11 +25,17 @@ rm -rf build
 mkdir build
 
 # make the deployment bucket in case it doesn't exist
-aws s3 mb s3://$BUCKET 
+# aws s3 mb s3://$BUCKET
+
+cp lambdas-version.yaml $WORKSPACE/lambdas.yaml
+
+sed -i '' "s/ENV/$STAGE/" $WORKSPACE/lambdas.yaml
+sed -i '' "s/LAMBDAENV/$STAGE/" $WORKSPACE/lambdas.yaml
 
 # generate next stage yaml file
-aws cloudformation package --template-file $WORKSPACE/devops/cloudformation/lambdas-version.yaml --output-template-file build/output.yaml --s3-bucket $BUCKET                      
-aws cloudformation deploy --template-file build/output.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM --parameter-overrides STAGE=$STAGE
+aws cloudformation package --template-file $WORKSPACE/lambdas.yaml --output-template-file build/output.yaml --s3-bucket $BUCKET
+
+aws cloudformation deploy --template-file build/output.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM
 
 
 

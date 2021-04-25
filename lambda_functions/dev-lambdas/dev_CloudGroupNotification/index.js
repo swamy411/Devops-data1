@@ -51,7 +51,7 @@ exports.handler = (event, context, callback) => {
         });
 
     }).catch((err) => {
-        console.log('GetSSMParam-error', err);
+        // console.log('GetSSMParam-error', err);
     });
 };
 

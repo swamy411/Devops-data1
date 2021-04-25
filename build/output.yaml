@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: This is jenkins deployement
+Parameters:
+  STAGE:
+    Type: String
+    Default: dev
+Resources:
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: PublishVersion
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+            - lambda:PublishVersion
+            - lambda:CreateAlias
+            - lambda:GetAlias
+            - lambda:ListAliases
+            - lambda:UpdateAlias
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:Get*
+            Resource: '*'
+  devAddTagToPatientObjects:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: dev-AddTagToPatientObjects
+      Handler: lambda_functions/dev-lambdas/dev_AddTagToPatientObjects/index.handler
+      Runtime: nodejs10.x
+      CodeUri: s3://dev-sam-s3-deployment/c7092553e21c1696493a47df398c71f5
+      Description: This is jenkins deployement
+      MemorySize: 1024
+      Timeout: 300
+      Role:
+        Fn::GetAtt:
+        - LambdaRole
+        - Arn
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+            - s3:ObjectCreated:*
+        BucketEvent2:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket2
+            Events:
+            - s3:ObjectCreated:*
+      Environment:
+        Variables:
+          ssm_store: /dev/
+      Tags:
+        Environment: Dev
+  Bucket1:
+    Type: AWS::S3::Bucket
+  Bucket2:
+    Type: AWS::S3::Bucket
+  devCloudGroupNotification:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: dev-CloudGroupNotification
+      Handler: lambda_functions/dev-lambdas/dev_CloudGroupNotification/index.handler
+      Runtime: nodejs10.x
+      CodeUri: s3://dev-sam-s3-deployment/c7092553e21c1696493a47df398c71f5
+      Description: ''
+      MemorySize: 128
+      Timeout: 900
+      Role:
+        Fn::GetAtt:
+        - LambdaRole
+        - Arn
+      Environment:
+        Variables:
+          ssm_store: /dev/
