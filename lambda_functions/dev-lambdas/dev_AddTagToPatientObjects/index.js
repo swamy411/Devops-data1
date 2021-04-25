@@ -15,10 +15,10 @@ var key;
 //Lambda entry point
 exports.handler = function(event, context) {
    
-    console.log('putCallback');
+    // console.log('putCallback');
     console.log(event.Records[0].s3.bucket.name);
     
-    console.log('End of putCallback');
+    // console.log('End of putCallback');
 	  //S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
     async.each(event.Records, processSingleEventRecord, context.done);
 };
