@@ -49,7 +49,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
-        Bucket: !Ref S3Bucket
+        Bucket:
+          Ref: S3Bucket
         Key: lambdas/dev_AddTagToPatientObjects.zip
         Version: <dev_AddTagToPatientObjects-s3-version>
       Description: This is jenkins deployement
@@ -109,7 +110,8 @@ Resources:
       Handler: index.handler
       Runtime: nodejs10.x
       CodeUri:
-        Bucket: !Ref S3Bucket
+        Bucket: 
+          Ref: S3Bucket
         Key: lambdas/dev_CloudGroupNotification.zip
         Version: <dev_CloudGroupNotification-s3-version>
       Description: ''
