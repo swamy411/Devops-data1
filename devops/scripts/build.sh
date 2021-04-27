@@ -48,6 +48,9 @@ compile_lambdas() {
         fi
         echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
+        npm install -g
+
+        echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
 
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
@@ -59,7 +62,7 @@ compile_lambdas() {
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
     cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit
-    LAMBDAS=$( ls -d ${STAGE}_* )
+    LAMBDAS=$( ls -d dev_* )
     compile_lambdas "${LAMBDAS[@]}"
 else
     echo "Compiling below lambdas: ${affected_folders[*]}"
