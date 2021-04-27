@@ -56,6 +56,8 @@ compile_lambdas() {
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
         "C:\Program Files\WinRAR\WinRAR.exe" a -afzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
+        
+        echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
     done;
 }
 
