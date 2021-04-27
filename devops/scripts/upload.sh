@@ -18,7 +18,6 @@ echo "uploading script-.--............"
 cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit
 echo $(pwd)
 echo $(ls)
-echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$lambda)
 #lambdas_list=$( ls -d */ | grep "lambda-" | cut -d / -f1 )
 lambdas_list=$( ls -d ${STAGE}_* )
 for lambda in ${lambdas_list[@]};
