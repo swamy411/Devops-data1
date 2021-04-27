@@ -45,7 +45,7 @@ var processSingleEventRecord = function(event, callback){
      // successful response
    /*
      data = {
-      VersionId: "null"
+        VersionId: "null"
       }
       */
  });
