@@ -42,11 +42,11 @@ var processSingleEventRecord = function(event, callback){
  s3.putObjectTagging(params, function(err, data) {
    if (err) console.log(err, err.stack); // an error occurred
    else     console.log(data);           
-   // successful response
+       // successful response
    /*
-   data = {
+    data = {
       VersionId: "null"
-   }
+    }
    */
  });
     var params = {
