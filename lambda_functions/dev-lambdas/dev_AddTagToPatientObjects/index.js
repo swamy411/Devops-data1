@@ -21,7 +21,7 @@ exports.handler = function(event, context) {
     async.each(event.Records, processSingleEventRecord, context.done);
 };
 
- // Generic  function to fetch the header, and extract the parameters
+    // Generic  function to fetch the header, and extract the parameters
 var processSingleEventRecord = function(event, callback){
 
     bucket = event.s3.bucket.name;
