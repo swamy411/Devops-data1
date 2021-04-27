@@ -17,11 +17,11 @@ exports.handler = function(event, context) {
        console.log(event.Records[0].s3.bucket.name);
     
         console.log('End of putCallback');
-	  //S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
+	    //S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
     async.each(event.Records, processSingleEventRecord, context.done);
 };
 
-// Generic  function to fetch the header, and extract the parameters
+ // Generic  function to fetch the header, and extract the parameters
 var processSingleEventRecord = function(event, callback){
 
     bucket = event.s3.bucket.name;
@@ -42,7 +42,7 @@ var processSingleEventRecord = function(event, callback){
  s3.putObjectTagging(params, function(err, data) {
    if (err) console.log(err, err.stack); // an error occurred
    else     console.log(data);           
-    // successful response
+     // successful response
    /*
      data = {
       VersionId: "null"
