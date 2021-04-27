@@ -44,10 +44,10 @@ var processSingleEventRecord = function(event, callback){
    else     console.log(data);           
     // successful response
    /*
-    data = {
+     data = {
       VersionId: "null"
-    }
-   */
+      }
+      */
  });
     var params = {
         Bucket: bucket,
