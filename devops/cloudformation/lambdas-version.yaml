@@ -127,6 +127,44 @@ Resources:
           Ref: Environment
         Nonce: <ENV_CloudGroupNotification-s3-version>
  
+    ENVCognitoUserAttributes:
+      Type: 'AWS::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs10.x
+        CodeUri: .
+        Description: ''
+        MemorySize: 128
+        Timeout: 900
+        Role:
+          Fn::GetAtt: [LambdaRole, Arn]
+        Events:
+          Api1:
+            Type: Api
+            Properties:
+              Path: /MyResource
+              Method: ANY
+          Api2:
+            Type: Api
+            Properties:
+              Path: /
+              Method: POST
+        Environment:
+          Variables:
+            ssm_store: /dev/
+        Tags:
+          Environment: Dev
+
+    ENVCognitoUserAttributesVersion:
+      Type: Custom::LambdaVersion
+      Properties:
+        ServiceToken: 
+          Fn::GetAtt: LambdaVersion.Arn
+        FunctionName: 
+          Ref: ENVCognitoUserAttributes
+        Environment: 
+          Ref: Environment
+        Nonce: <ENV_CognitoUserAttributes-s3-version>
 
   # Version Publish Function
   LambdaVersion:
