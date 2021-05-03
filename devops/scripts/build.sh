@@ -8,6 +8,9 @@ COMMIT_SHA=$( git rev-parse HEAD )
 #DEFAULTS
 #Ignore Other Folders to Ignore During Build.
 ignore_list=("devops")
+ignore_yml=("lambdas-version.yaml")
+ignore_env=(".env")
+ignore_build=("build.sh")
 
 # #Identify the Affected Lambdas
 
@@ -45,6 +48,18 @@ compile_lambdas() {
     do 
         if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
             continue
+        fi
+        if [[ "${ignore_yml[@]}" =~ ${folder} ]]; then
+            continue
+        fi
+        if [[ "${ignore_env[@]}" =~ ${folder} ]]; then
+            continue
+        fi
+        if [[ "${ignore_build[@]}" =~ ${folder} ]]; then
+            continue
+        fi
+        if [ "${folder}" == "" ]; then 
+            exit
         fi
         echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
