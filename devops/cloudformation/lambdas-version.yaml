@@ -171,6 +171,48 @@ Resources:
           Ref: Environment
         Nonce: <ENV_CognitoUserAttributes-s3-version>
 
+
+    ENVCopyRecoveredObjectFunction:
+      Type: 'AWS::Serverless::Function'
+      Properties:
+        FunctionName: ENV-CopyRecoveredObjectFunction
+        Handler: index.handler
+        Runtime: nodejs10.x
+        CodeUri:
+          Bucket: 
+            Ref: S3Bucket
+          Key: lambdas/ENV_CopyRecoveredObjectFunction.zip
+          Version: <ENV_CopyRecoveredObjectFunction-s3-version>
+        Description: This is jenkins deployement
+        MemorySize: 1024
+        Timeout: 300
+        Role: 
+          Fn::GetAtt: [LambdaRole, Arn]
+        Events:
+          BucketEvent1:
+            Type: S3
+            Properties:
+              Bucket:
+                Ref: Bucket1
+              Events:
+                - !<tag:yaml.org,2002:js/undefined> ''
+        Environment:
+          Variables:
+            ssm_store: /dev/
+        Tags:
+          Environment: Dev
+
+    ENVCopyRecoveredObjectFunctionVersion:
+      Type: Custom::LambdaVersion
+      Properties:
+        ServiceToken: 
+          Fn::GetAtt: LambdaVersion.Arn
+        FunctionName: 
+          Ref: ENVCopyRecoveredObjectFunction
+        Environment:
+          Ref: Environment
+        Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
+
   # Version Publish Function
   LambdaVersion:
     Type: 'AWS::Serverless::Function'
