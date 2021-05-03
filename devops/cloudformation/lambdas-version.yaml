@@ -130,6 +130,7 @@ Resources:
     ENVCognitoUserAttributes:
       Type: 'AWS::Serverless::Function'
       Properties:
+        FunctionName: ENV-CognitoUserAttributes
         Handler: index.handler
         Runtime: nodejs10.x
         CodeUri: .
