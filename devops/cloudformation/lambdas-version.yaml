@@ -133,7 +133,11 @@ Resources:
         FunctionName: ENV-CognitoUserAttributes
         Handler: index.handler
         Runtime: nodejs10.x
-        CodeUri: .
+        CodeUri:
+          Bucket: 
+            Ref: S3Bucket
+          Key: lambdas/ENV_CognitoUserAttributes.zip
+          Version: <ENV_CognitoUserAttributes-s3-version>
         Description: ''
         MemorySize: 128
         Timeout: 900
