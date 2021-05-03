@@ -195,7 +195,7 @@ Resources:
               Bucket:
                 Ref: Bucket1
               Events:
-                - !<tag:yaml.org,2002:js/undefined> ''
+                - 's3:ObjectCreated:*'
         Environment:
           Variables:
             ssm_store: /dev/

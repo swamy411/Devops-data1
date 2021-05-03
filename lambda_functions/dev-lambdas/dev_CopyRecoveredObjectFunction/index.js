@@ -13,7 +13,7 @@ exports.handler = function(event, context) {
    envReq.then(() => {
     lensmediaBucket = environment['envprefix'] + '-lensmediabucket';
     archiveobjBucket = environment['envprefix'] + '-lensarchiveobjects';
-	//S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
+	  //S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
     async.each(event.Records, processSingleEventRecord, context.done);
    }).catch((err) => {
        console.log('GetSSMParam-error', err);
