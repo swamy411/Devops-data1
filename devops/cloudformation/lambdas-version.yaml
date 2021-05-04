@@ -212,6 +212,39 @@ Resources:
       Environment:
         Ref: Environment
       Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
+  
+  ENVExportDeviceBlobFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV-ExportDeviceBlobFunction
+      Handler: index.handler
+      Runtime: nodejs10.x
+      CodeUri:
+        Bucket: 
+          Ref: S3Bucket
+        Key: lambdas/ENV_ExportDeviceBlobFunction.zip
+        Version: <ENV_ExportDeviceBlobFunction-s3-version>
+      Description: This is jenkins deployement
+      MemorySize: 256
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [LambdaRole, Arn]
+      Environment:
+        Variables:
+          ssm_store: /dev/
+      Tags:
+        Environment: Dev
+
+  ENVExportDeviceBlobFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVExportDeviceBlobFunction
+      Environment:
+        Ref: Environment
+      Nonce: <ENV_ExportDeviceBlobFunction-s3-version>
 
   # Version Publish Function
   LambdaVersion:
