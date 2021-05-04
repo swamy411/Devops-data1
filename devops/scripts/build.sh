@@ -11,6 +11,8 @@ ignore_list=("devops")
 ignore_yml=("lambdas-version.yaml")
 ignore_env=(".env")
 ignore_build=("build.sh")
+ignore_deploy=("deploy.sh")
+ignore_upload=("upload.sh")
 
 # #Identify the Affected Lambdas
 
@@ -46,21 +48,14 @@ compile_lambdas() {
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
     do 
-        if [[ "${ignore_list[@]}" =~ ${folder} ]]; then
+        if [[ "${ignore_list[@]}" =~ ${folder} ||  "${ignore_yml[@]}" =~ ${folder} || "${ignore_env[@]}" =~ ${folder} || "${ignore_build[@]}" =~ ${folder} || "${ignore_deploy[@]}" =~ ${folder} || "${ignore_upload[@]}" =~ ${folder} ]]; then
             continue
         fi
-        if [[ "${ignore_yml[@]}" =~ ${folder} ]]; then
-            continue
-        fi
-        if [[ "${ignore_env[@]}" =~ ${folder} ]]; then
-            continue
-        fi
-        if [[ "${ignore_build[@]}" =~ ${folder} ]]; then
-            continue
-        fi
+        
         if [ "${folder}" == "" ]; then 
             exit
         fi
+        
         echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
         npm install -g
