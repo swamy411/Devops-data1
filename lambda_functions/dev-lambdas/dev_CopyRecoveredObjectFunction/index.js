@@ -20,7 +20,7 @@ exports.handler = function(event, context) {
    });
 };
 
-//Generic function to fetch the header, and extract the parameters
+ //Generic function to fetch the header, and extract the parameters
 var processSingleEventRecord = function(event, callback){
 
     var bucket = event.s3.bucket.name;
