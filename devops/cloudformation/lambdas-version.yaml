@@ -96,36 +96,36 @@ Resources:
         Ref: Environment
       Nonce: <ENV_AddTagToPatientObjects-s3-version>
 
-  # ENVCloudGroupNotification:
-  #   Type: 'AWS::Serverless::Function'
-  #   Properties:
-  #     FunctionName: ENV-CloudGroupNotification
-  #     Handler: index.handler
-  #     Runtime: nodejs10.x
-  #     CodeUri:
-  #       Bucket: 
-  #         Ref: S3Bucket
-  #       Key: lambdas/ENV_CloudGroupNotification.zip
-  #       Version: <ENV_CloudGroupNotification-s3-version>
-  #     Description: ''
-  #     MemorySize: 128
-  #     Timeout: 900
-  #     Role: 
-  #       Fn::GetAtt: [LambdaRole, Arn]
-  #     Environment:
-  #       Variables:
-  #         ssm_store: /ENV/
+  ENVCloudGroupNotification:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV-CloudGroupNotification
+      Handler: index.handler
+      Runtime: nodejs10.x
+      CodeUri:
+        Bucket: 
+          Ref: S3Bucket
+        Key: lambdas/ENV_CloudGroupNotification.zip
+        Version: <ENV_CloudGroupNotification-s3-version>
+      Description: ''
+      MemorySize: 128
+      Timeout: 900
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Environment:
+        Variables:
+          ssm_store: /ENV/
 
-  # ENVCloudGroupNotificationVersion:
-  #   Type: Custom::LambdaVersion
-  #   Properties:
-  #     ServiceToken: 
-  #       Fn::GetAtt: LambdaVersion.Arn
-  #     FunctionName: 
-  #       Ref: ENVCloudGroupNotification
-  #     Environment: 
-  #       Ref: Environment
-  #     Nonce: <ENV_CloudGroupNotification-s3-version>
+  ENVCloudGroupNotificationVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVCloudGroupNotification
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_CloudGroupNotification-s3-version>
  
   # ENVCognitoUserAttributes:
   #   Type: 'AWS::Serverless::Function'
