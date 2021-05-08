@@ -96,155 +96,155 @@ Resources:
         Ref: Environment
       Nonce: <ENV_AddTagToPatientObjects-s3-version>
 
-  ENVCloudGroupNotification:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV-CloudGroupNotification
-      Handler: index.handler
-      Runtime: nodejs10.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: lambdas/ENV_CloudGroupNotification.zip
-        Version: <ENV_CloudGroupNotification-s3-version>
-      Description: ''
-      MemorySize: 128
-      Timeout: 900
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
-      Environment:
-        Variables:
-          ssm_store: /ENV/
+  # ENVCloudGroupNotification:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV-CloudGroupNotification
+  #     Handler: index.handler
+  #     Runtime: nodejs10.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: lambdas/ENV_CloudGroupNotification.zip
+  #       Version: <ENV_CloudGroupNotification-s3-version>
+  #     Description: ''
+  #     MemorySize: 128
+  #     Timeout: 900
+  #     Role: 
+  #       Fn::GetAtt: [LambdaRole, Arn]
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /ENV/
 
-  ENVCloudGroupNotificationVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVCloudGroupNotification
-      Environment: 
-        Ref: Environment
-      Nonce: <ENV_CloudGroupNotification-s3-version>
+  # ENVCloudGroupNotificationVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVCloudGroupNotification
+  #     Environment: 
+  #       Ref: Environment
+  #     Nonce: <ENV_CloudGroupNotification-s3-version>
  
-  ENVCognitoUserAttributes:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV-CognitoUserAttributes
-      Handler: index.handler
-      Runtime: nodejs10.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: lambdas/ENV_CognitoUserAttributes.zip
-        Version: <ENV_CognitoUserAttributes-s3-version>
-      Description: ''
-      MemorySize: 128
-      Timeout: 900
-      Role:
-        Fn::GetAtt: [LambdaRole, Arn]
-      Events:
-        Api1:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api2:
-          Type: Api
-          Properties:
-            Path: /
-            Method: POST
-      Environment:
-        Variables:
-          ssm_store: /dev/
-      Tags:
-        Environment: Dev
+  # ENVCognitoUserAttributes:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV-CognitoUserAttributes
+  #     Handler: index.handler
+  #     Runtime: nodejs10.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: lambdas/ENV_CognitoUserAttributes.zip
+  #       Version: <ENV_CognitoUserAttributes-s3-version>
+  #     Description: ''
+  #     MemorySize: 128
+  #     Timeout: 900
+  #     Role:
+  #       Fn::GetAtt: [LambdaRole, Arn]
+  #     Events:
+  #       Api1:
+  #         Type: Api
+  #         Properties:
+  #           Path: /MyResource
+  #           Method: ANY
+  #       Api2:
+  #         Type: Api
+  #         Properties:
+  #           Path: /
+  #           Method: POST
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /dev/
+  #     Tags:
+  #       Environment: Dev
 
-  ENVCognitoUserAttributesVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVCognitoUserAttributes
-      Environment: 
-        Ref: Environment
-      Nonce: <ENV_CognitoUserAttributes-s3-version>
+  # ENVCognitoUserAttributesVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVCognitoUserAttributes
+  #     Environment: 
+  #       Ref: Environment
+  #     Nonce: <ENV_CognitoUserAttributes-s3-version>
 
 
-  ENVCopyRecoveredObjectFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV-CopyRecoveredObjectFunction
-      Handler: index.handler
-      Runtime: nodejs10.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: lambdas/ENV_CopyRecoveredObjectFunction.zip
-        Version: <ENV_CopyRecoveredObjectFunction-s3-version>
-      Description: This is jenkins deployement
-      MemorySize: 1024
-      Timeout: 300
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
-      Events:
-        BucketEvent1:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: Bucket1
-            Events:
-              - 's3:ObjectCreated:*'
-      Environment:
-        Variables:
-          ssm_store: /dev/
-      Tags:
-        Environment: Dev
+  # ENVCopyRecoveredObjectFunction:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV-CopyRecoveredObjectFunction
+  #     Handler: index.handler
+  #     Runtime: nodejs10.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: lambdas/ENV_CopyRecoveredObjectFunction.zip
+  #       Version: <ENV_CopyRecoveredObjectFunction-s3-version>
+  #     Description: This is jenkins deployement
+  #     MemorySize: 1024
+  #     Timeout: 300
+  #     Role: 
+  #       Fn::GetAtt: [LambdaRole, Arn]
+  #     Events:
+  #       BucketEvent1:
+  #         Type: S3
+  #         Properties:
+  #           Bucket:
+  #             Ref: Bucket1
+  #           Events:
+  #             - 's3:ObjectCreated:*'
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /dev/
+  #     Tags:
+  #       Environment: Dev
 
-  ENVCopyRecoveredObjectFunctionVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVCopyRecoveredObjectFunction
-      Environment:
-        Ref: Environment
-      Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
+  # ENVCopyRecoveredObjectFunctionVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVCopyRecoveredObjectFunction
+  #     Environment:
+  #       Ref: Environment
+  #     Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
   
-  ENVExportDeviceBlobFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV-ExportDeviceBlobFunction
-      Handler: index.handler
-      Runtime: nodejs10.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: lambdas/ENV_ExportDeviceBlobFunction.zip
-        Version: <ENV_ExportDeviceBlobFunction-s3-version>
-      Description: This is jenkins deployement
-      MemorySize: 256
-      Timeout: 300
-      Role:
-        Fn::GetAtt: [LambdaRole, Arn]
-      Environment:
-        Variables:
-          ssm_store: /dev/
-      Tags:
-        Environment: Dev
+  # ENVExportDeviceBlobFunction:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV-ExportDeviceBlobFunction
+  #     Handler: index.handler
+  #     Runtime: nodejs10.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: lambdas/ENV_ExportDeviceBlobFunction.zip
+  #       Version: <ENV_ExportDeviceBlobFunction-s3-version>
+  #     Description: This is jenkins deployement
+  #     MemorySize: 256
+  #     Timeout: 300
+  #     Role:
+  #       Fn::GetAtt: [LambdaRole, Arn]
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /dev/
+  #     Tags:
+  #       Environment: Dev
 
-  ENVExportDeviceBlobFunctionVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVExportDeviceBlobFunction
-      Environment:
-        Ref: Environment
-      Nonce: <ENV_ExportDeviceBlobFunction-s3-version>
+  # ENVExportDeviceBlobFunctionVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVExportDeviceBlobFunction
+  #     Environment:
+  #       Ref: Environment
+  #     Nonce: <ENV_ExportDeviceBlobFunction-s3-version>
 
   # Version Publish Function
   LambdaVersion:
