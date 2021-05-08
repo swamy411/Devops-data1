@@ -16,7 +16,7 @@ exports.handler = function(event, context) {
 	  //S3 sends a batch of events.  Need to handle the possibility of mutliple upload events
     async.each(event.Records, processSingleEventRecord, context.done);
    }).catch((err) => {
-       console.log('GetSSMParam-error', err);
+    //    console.log('GetSSMParam-error', err);
    });
 };
 
