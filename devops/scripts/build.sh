@@ -58,7 +58,7 @@ compile_lambdas() {
         
         echo "Folder Name :--- ${folder}"
         cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
-        npm install -g
+        npm install
 
         echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
 
