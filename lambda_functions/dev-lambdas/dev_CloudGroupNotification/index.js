@@ -11,8 +11,8 @@ exports.handler = (event, context, callback) => {
         const notificationList = event.notificationList || [];
         const userList = event.userlist || [];
         
-         console.log("---notificationList" + JSON.stringify(notificationList));
-        console.log("---userList" + JSON.stringify(userList));
+        //  console.log("---notificationList" + JSON.stringify(notificationList));
+        // console.log("---userList" + JSON.stringify(userList));
 
         notificationList.forEach((n) => {
             let notifyData = n;
