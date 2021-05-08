@@ -61,9 +61,9 @@ compile_lambdas() {
         npm install
 
         echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
-        sleep 20 &
+        # sleep 20 &
 
-        wait $! 
+        # wait $! 
 
         echo "Packaging Lambda Artifacts"
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
