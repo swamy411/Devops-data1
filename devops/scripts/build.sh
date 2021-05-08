@@ -69,7 +69,9 @@ compile_lambdas() {
         mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
         #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
         # "C:\Program Files\WinRAR\WinRAR.exe" a -afzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
-        "C:\Program Files\7-Zip\7z.exe" a -tzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" "${CI_PROJECT_DIR}/artifacts/lambdas"
+        # "C:\Program Files\7-Zip\7z.exe" a -tzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" "${CI_PROJECT_DIR}/artifacts/lambdas"
+        "C:\Program Files\WinRAR\Rar.exe" a -ep1 -idq -r -y "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
+        
         
     done;
 }
