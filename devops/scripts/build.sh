@@ -4,6 +4,7 @@
 CI_PROJECT_DIR=$1
 COMMIT_SHA=$( git rev-parse HEAD )
 
+echo ${STAGE}
 
 #DEFAULTS
 #Ignore Other Folders to Ignore During Build.
@@ -16,7 +17,7 @@ ignore_upload=("upload.sh")
 
 # #Identify the Affected Lambdas
 
-mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f3 | uniq )
+mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | cut -d/ -f2 | uniq )
 
 # mapfile -t lines < <(git diff-tree --no-commit-id --name-only -r "${COMMIT_SHA}" | grep ./ | tr "/" " "| uniq )
 
@@ -40,7 +41,7 @@ compile_lambdas() {
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
     echo $(pwd)
-    ListDir=$(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas)
+    ListDir=$(ls ${CI_PROJECT_DIR}/lambda_functions)
     echo "List Dir:-- ${ListDir[@]}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
@@ -55,23 +56,23 @@ compile_lambdas() {
         
         if [ "${folder}" == "ffmpeg_lib" ]; then 
             echo "ffmpeg Folder Name :--- ${folder}"
-            cd "${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder" || continue
+            cd "${CI_PROJECT_DIR}/dependencies/$folder" || continue
             
-            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder)
+            echo $(ls ${CI_PROJECT_DIR}/dependencies/$folder)
             echo "Packaging Lambda Layer Artifacts"
             
             "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "ffmpeg.zip" .
-            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder)
+            echo $(ls ${CI_PROJECT_DIR}/dependencies/$folder)
 
             echo "Deploying ffmpeg library...."
             "C:\Program Files\Amazon\AWSCLIV2\aws.exe" lambda publish-layer-version --layer-name ffmpeg_custom_layer --description "Custom ffmpeg layer" --compatible-runtimes nodejs14.x --zip-file "fileb://ffmpeg.zip"
 
         else
             echo "Folder Name :--- ${folder}"
-            cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || continue
+            cd "${CI_PROJECT_DIR}/lambda_functions/$folder" || continue
             npm install
 
-            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
+            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/$folder)
             echo "Packaging Lambda Artifacts"
             mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
             "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
@@ -83,8 +84,8 @@ compile_lambdas() {
 
 if [ "$build_all_lambdas" = true ] ; then
     echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit
-    LAMBDAS=$( ls -d ${STAGE}_* )
+    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+    LAMBDAS=$( ls )
     compile_lambdas "${LAMBDAS[@]}"
 else
     echo "Compiling below lambdas: ${affected_folders[*]}"
