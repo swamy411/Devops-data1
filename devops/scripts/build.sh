@@ -54,7 +54,7 @@ compile_lambdas() {
             exit
         fi
         
-        if [ "${folder}" == "ffmpeg_lib" ]; then 
+        if [ "${folder}" == "ffmpeg_lib" ] || [ "$build_all_lambdas" = true ]; then 
             echo "ffmpeg Folder Name :--- ${folder}"
             cd "${CI_PROJECT_DIR}/dependencies/$folder" || continue
             

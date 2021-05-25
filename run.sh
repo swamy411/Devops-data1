@@ -11,7 +11,7 @@ rm -rf artifacts
 ./devops/scripts/build.sh "${WORKSPACE}"
 
 #Uploading Artifacts to S3 Bucket
-#./devops/scripts/upload.sh "${WORKSPACE}"
+./devops/scripts/upload.sh "${WORKSPACE}"
 
 #Deploy Artifacts to AWS Lambda using Cloud Formation
-#./devops/scripts/deploy.sh "${WORKSPACE}"
+./devops/scripts/deploy.sh "${WORKSPACE}"
