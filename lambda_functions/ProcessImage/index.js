@@ -8,7 +8,7 @@ const s3Util = require('./s3-util'),
 	MIME_TYPE =  "image/jpeg";
 
 exports.handler = function (eventObject, context){
-	// const eventRecord = eventObject.Records && eventObject.Records[0] ,
+	//const eventRecord = eventObject.Records && eventObject.Records[0] ,
 	const	inputBucket = "swamy-layers-test-main",
 		key = "desktopImage.jpg",
 		id = context.awsRequestId,
