@@ -4,7 +4,7 @@
 CI_PROJECT_DIR=$1
 COMMIT_SHA=$( git rev-parse HEAD )
 
-echo ${STAGE}
+FFMPEG_LIB_DIR=("ffmpeg_lib")
 
 #DEFAULTS
 #Ignore Other Folders to Ignore During Build.
@@ -36,6 +36,20 @@ fi
 
 echo "Build All Lambdas ? ${build_all_lambdas}"
 
+deploy_ffmpeg() {
+    echo "ffmpeg Folder Name :--- ${FFMPEG_LIB_DIR}"
+    cd "${CI_PROJECT_DIR}/dependencies/$FFMPEG_LIB_DIR" || continue
+    
+    echo $(ls ${CI_PROJECT_DIR}/dependencies/$FFMPEG_LIB_DIR)
+    echo "Packaging Lambda Layer Artifacts"
+    
+    "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "ffmpeg.zip" .
+    echo $(ls ${CI_PROJECT_DIR}/dependencies/$FFMPEG_LIB_DIR)
+
+    echo "Deploying ffmpeg library...."
+    "C:\Program Files\Amazon\AWSCLIV2\aws.exe" lambda publish-layer-version --layer-name ffmpeg_custom_layer --description "Custom ffmpeg layer" --compatible-runtimes nodejs14.x --zip-file "fileb://ffmpeg.zip"
+}
+
 compile_lambdas() {
     src_path=( $@ )
     echo $@
@@ -54,19 +68,8 @@ compile_lambdas() {
             exit
         fi
         
-        if [ "${folder}" == "ffmpeg_lib" ] || [ "$build_all_lambdas" = true ]; then 
-            echo "ffmpeg Folder Name :--- ${folder}"
-            cd "${CI_PROJECT_DIR}/dependencies/$folder" || continue
-            
-            echo $(ls ${CI_PROJECT_DIR}/dependencies/$folder)
-            echo "Packaging Lambda Layer Artifacts"
-            
-            "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "ffmpeg.zip" .
-            echo $(ls ${CI_PROJECT_DIR}/dependencies/$folder)
-
-            echo "Deploying ffmpeg library...."
-            "C:\Program Files\Amazon\AWSCLIV2\aws.exe" lambda publish-layer-version --layer-name ffmpeg_custom_layer --description "Custom ffmpeg layer" --compatible-runtimes nodejs14.x --zip-file "fileb://ffmpeg.zip"
-
+        if [ "${folder}" == ${FFMPEG_LIB_DIR} ]; then 
+            deploy_ffmpeg
         else
             echo "Folder Name :--- ${folder}"
             cd "${CI_PROJECT_DIR}/lambda_functions/$folder" || continue
@@ -83,6 +86,7 @@ compile_lambdas() {
 }
 
 if [ "$build_all_lambdas" = true ] ; then
+    deploy_ffmpeg
     echo 'Building All Lambdas'
     cd "${CI_PROJECT_DIR}/lambda_functions" || exit
     LAMBDAS=$( ls )
