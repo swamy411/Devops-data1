@@ -35,6 +35,5 @@ do
     
 done;
 
-echo $(cat "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml")
 # echo "Uploading cloudformation files"
 # aws s3 cp "${CI_PROJECT_DIR}/devops/cloudformation/" "s3://${S3_BUCKET}/" --recursive
