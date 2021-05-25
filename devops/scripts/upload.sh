@@ -13,6 +13,12 @@ cp -f "${CI_PROJECT_DIR}/devops/cloudformation/lambdas-version.yaml" "${CI_PROJE
 
 sed -i "s/ENV/${STAGE}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
 
+echo "Fetching Lambda Layer version for ffmpeg"
+Layer_Arn=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" lambda list-layer-versions --layer-name ffmpeg_custom_layer --query LayerVersions[0].LayerVersionArn)
+
+echo "Layer Arn : ${Layer_Arn}"
+sed -i "s/ffmpeg_custom_layer_arn/${Layer_Arn}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
+
 # Update Lambda S3 Version in CF Template
 echo "uploading script-.--............"
 cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit

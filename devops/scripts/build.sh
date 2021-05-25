@@ -25,9 +25,6 @@ echo "Lines Value---: ${lines}"
 affected_folders=("$(printf '%s\n' "${lines[@]}" | sort -r)")
 echo "Affected Folders : ${affected_folders[*]}"
 
-#Testing
-#affected_folders=("lambda-B")
-echo "Affected Folders : ${affected_folders[*]}"
 
 build_all_lambdas=false
 
@@ -56,22 +53,30 @@ compile_lambdas() {
             exit
         fi
         
-        echo "Folder Name :--- ${folder}"
-        cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || exit
-        npm install
+        if [ "${folder}" == "ffmpeg_lib" ]; then 
+            echo "ffmpeg Folder Name :--- ${folder}"
+            cd "${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder" || continue
+            
+            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder)
+            echo "Packaging Lambda Layer Artifacts"
+            
+            "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "ffmpeg.zip" .
+            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/dependencies/$folder)
 
-        echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
-        # sleep 20 &
+            echo "Deploying ffmpeg library...."
+            "C:\Program Files\Amazon\AWSCLIV2\aws.exe" lambda publish-layer-version --layer-name ffmpeg_custom_layer --description "Custom ffmpeg layer" --compatible-runtimes nodejs14.x --zip-file "fileb://ffmpeg.zip"
 
-        # wait $! 
+        else
+            echo "Folder Name :--- ${folder}"
+            cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder" || continue
+            npm install
 
-        echo "Packaging Lambda Artifacts"
-        mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
-        #zip -r -j "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
-        "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
-        # "C:\Program Files\7-Zip\7z.exe" a -tzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" "${CI_PROJECT_DIR}/artifacts/lambdas"
-        # "C:\Program Files\WinRAR\Rar.exe" a -r -y -tzip "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
-        
+            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas/$folder)
+            echo "Packaging Lambda Artifacts"
+            mkdir -p "${CI_PROJECT_DIR}/artifacts/lambdas"
+            "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "${CI_PROJECT_DIR}/artifacts/lambdas/${folder}.zip" .
+        fi
+
         
     done;
 }

@@ -4,15 +4,15 @@ var ssm = new aws.SSM();
 var envPath = process.env.ssm_store;
 var environment = {};
 
-exports.handler = (event, context, callback) => {
+exports.handler = (event, context, callback) =>{
     var envReq = getParameterFromSystemManager();
     envReq.then(() => {
         
         const notificationList = event.notificationList || [];
         const userList = event.userlist || [];
         
-        //  console.log("---notificationList" + JSON.stringify(notificationList));
-        // console.log("---userList" + JSON.stringify(userList));
+        console.log("---notificationList" + JSON.stringify(notificationList));
+        console.log("---userList" + JSON.stringify(userList));
 
         notificationList.forEach((n) => {
             let notifyData = n;

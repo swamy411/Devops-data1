@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: This is jenkins deployement
+Description: This is jenkins SAM deployement
 #Parameter Configuration Required to deploy Lambdas:
 Parameters:
   STAGE:
@@ -47,7 +47,7 @@ Resources:
     Properties:
       FunctionName: ENV-AddTagToPatientObjects
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       CodeUri:
         Bucket:
           Ref: S3Bucket
@@ -101,7 +101,7 @@ Resources:
     Properties:
       FunctionName: ENV-CloudGroupNotification
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
@@ -126,125 +126,143 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <ENV_CloudGroupNotification-s3-version>
- 
-  # ENVCognitoUserAttributes:
-  #   Type: 'AWS::Serverless::Function'
-  #   Properties:
-  #     FunctionName: ENV-CognitoUserAttributes
-  #     Handler: index.handler
-  #     Runtime: nodejs10.x
-  #     CodeUri:
-  #       Bucket: 
-  #         Ref: S3Bucket
-  #       Key: lambdas/ENV_CognitoUserAttributes.zip
-  #       Version: <ENV_CognitoUserAttributes-s3-version>
-  #     Description: ''
-  #     MemorySize: 128
-  #     Timeout: 900
-  #     Role:
-  #       Fn::GetAtt: [LambdaRole, Arn]
-  #     Events:
-  #       Api1:
-  #         Type: Api
-  #         Properties:
-  #           Path: /MyResource
-  #           Method: ANY
-  #       Api2:
-  #         Type: Api
-  #         Properties:
-  #           Path: /
-  #           Method: POST
-  #     Environment:
-  #       Variables:
-  #         ssm_store: /dev/
-  #     Tags:
-  #       Environment: Dev
 
-  # ENVCognitoUserAttributesVersion:
-  #   Type: Custom::LambdaVersion
-  #   Properties:
-  #     ServiceToken: 
-  #       Fn::GetAtt: LambdaVersion.Arn
-  #     FunctionName: 
-  #       Ref: ENVCognitoUserAttributes
-  #     Environment: 
-  #       Ref: Environment
-  #     Nonce: <ENV_CognitoUserAttributes-s3-version>
-
-  ENVCopyRecoveredObjectFunction:
+  ENVClearExistingExportZip:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-CopyRecoveredObjectFunction
+      FunctionName: ENV-ClearExistingExportZip
       Handler: index.handler
-      Runtime: nodejs10.x
-      CodeUri:
-        Bucket: 
+      Runtime: nodejs14.x
+      CodeUri: 
+        Bucket:
           Ref: S3Bucket
-        Key: lambdas/ENV_CopyRecoveredObjectFunction.zip
-        Version: <ENV_CopyRecoveredObjectFunction-s3-version>
+        Key: lambdas/ENV_ClearExistingExportZip.zip
+        Version: <ENV_ClearExistingExportZip-s3-version>
       Description: This is jenkins deployement
-      MemorySize: 1024
+      MemorySize: 1792
       Timeout: 300
       Role: 
         Fn::GetAtt: [LambdaRole, Arn]
-      Events:
-        BucketEvent1:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: Bucket1
-            Events:
-              - 's3:ObjectCreated:*'
       Environment:
         Variables:
-          ssm_store: /dev/
+          ssm_store: /ENV/
       Tags:
         Environment: Dev
 
-  ENVCopyRecoveredObjectFunctionVersion:
+  ENVClearExistingExportZipVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: ENVCopyRecoveredObjectFunction
-      Environment:
+        Ref: ENVClearExistingExportZip
+      Environment: 
         Ref: Environment
-      Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
+      Nonce: <ENV_ClearExistingExportZip-S3-version>
   
-  # ENVExportDeviceBlobFunction:
-  #   Type: 'AWS::Serverless::Function'
-  #   Properties:
-  #     FunctionName: ENV-ExportDeviceBlobFunction
-  #     Handler: index.handler
-  #     Runtime: nodejs10.x
-  #     CodeUri:
-  #       Bucket: 
-  #         Ref: S3Bucket
-  #       Key: lambdas/ENV_ExportDeviceBlobFunction.zip
-  #       Version: <ENV_ExportDeviceBlobFunction-s3-version>
-  #     Description: This is jenkins deployement
-  #     MemorySize: 256
-  #     Timeout: 300
-  #     Role:
-  #       Fn::GetAtt: [LambdaRole, Arn]
-  #     Environment:
-  #       Variables:
-  #         ssm_store: /dev/
-  #     Tags:
-  #       Environment: Dev
+  ENVCognitoPreSignupConfirmation:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV-CognitoPreSignupConfirmation
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri: 
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_CognitoPreSignupConfirmation.zip
+        Version: <ENV_CognitoPreSignupConfirmation-s3-version>
+      Description: This is jenkins deployement
+      MemorySize: 1792
+      Timeout: 300
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev
 
-  # ENVExportDeviceBlobFunctionVersion:
-  #   Type: Custom::LambdaVersion
-  #   Properties:
-  #     ServiceToken: 
-  #       Fn::GetAtt: LambdaVersion.Arn
-  #     FunctionName: 
-  #       Ref: ENVExportDeviceBlobFunction
-  #     Environment:
-  #       Ref: Environment
-  #     Nonce: <ENV_ExportDeviceBlobFunction-s3-version>
+  ENVCognitoPreSignupConfirmationVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVCognitoPreSignupConfirmation
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_CognitoPreSignupConfirmation-S3-version>
 
+  ENVProcessImage:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV-ProcessImage
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri: 
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_ProcessImage.zip
+        Version: <ENV_ProcessImage-s3-version>
+      Description: This is jenkins deployement
+      MemorySize: 1792
+      Timeout: 300
+      Layers:
+        - ffmpeg_custom_layer_arn
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev
+
+  ENVProcessImageVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVProcessImage
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_ProcessImage-S3-version>
+
+  ENVImageConversion:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV-ImageConversion
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri: 
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_ImageConversion.zip
+        Version: <ENV_ImageConversion-s3-version>
+      Description: This is jenkins deployement
+      MemorySize: 1792
+      Timeout: 300
+      Layers:
+        - ffmpeg_custom_layer_arn
+      Role: 
+        Fn::GetAtt: [LambdaRole, Arn]
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev
+
+  ENVImageConversionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVImageConversion
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_ImageConversion-S3-version>
+  
   # Version Publish Function
   LambdaVersion:
     Type: 'AWS::Serverless::Function'
