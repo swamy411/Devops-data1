@@ -1,17 +1,17 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: This is jenkins SAM deployement
+Description: Dev2 Jenkins SAM Deployment
 #Parameter Configuration Required to deploy Lambdas:
 Parameters:
   STAGE:
     Type: String
-    Default: dev
+    Default: dev2
   S3Bucket:
     Type: String
-    Default: "jenkins-code-build"
+    Default: "jenkins-dev2-deployment"
   Environment:
     Type: String
-    Default: "DEV"
+    Default: "DEV2"
 Resources:
 #IAM Role Required for Lambdas to function Properly
   LambdaRole:
@@ -45,7 +45,7 @@ Resources:
   ENVAddTagToPatientObjects:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-AddTagToPatientObjects
+      FunctionName: ENV_AddTagToPatientObjects
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
@@ -53,11 +53,10 @@ Resources:
           Ref: S3Bucket
         Key: lambdas/ENV_AddTagToPatientObjects.zip
         Version: <ENV_AddTagToPatientObjects-s3-version>
-      Description: This is jenkins deployement
+      Description: Jenkins Dev2 Deployment
       MemorySize: 1024
       Timeout: 300
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
+      Role: 'arn:aws:iam::491655376147:role/dev_exportpatientprocedure_functionrole'
       Events:
         BucketEvent1:
           Type: S3
@@ -73,11 +72,17 @@ Resources:
               Ref: Bucket2
             Events:
               - 's3:ObjectCreated:*'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /ENV/
       Tags:
-        Environment: Dev
+        Environment: Dev2
       
   Bucket1:
     Type: 'AWS::S3::Bucket'
@@ -96,10 +101,182 @@ Resources:
         Ref: Environment
       Nonce: <ENV_AddTagToPatientObjects-s3-version>
 
+  ENVAntivirusFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_AntivirusFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri:
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_AntivirusFunction.zip
+        Version: <ENV_AntivirusFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 2816
+      Timeout: 600
+      Role: >-
+        arn:aws:iam::491655376147:role/service-role/dev_AntivirusFunction-role-6s3rkh21
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:*'
+        SNS1:
+          Type: SNS
+          Properties:
+            Topic:
+              Ref: SNSTopic1
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+      
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+  SNSTopic1:
+    Type: 'AWS::SNS::Topic'
+
+  #Version: AntivirusFunction-Function
+  ENVAntivirusFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVAntivirusFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_AntivirusFunction-s3-version>
+
+  ENVArchiveObjectsFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_ArchiveObjectsFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri:
+        Bucket: 
+          Ref: S3Bucket
+        Key: lambdas/ENV_ArchiveObjectsFunction.zip
+        Version: <ENV_ArchiveObjectsFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1024
+      Timeout: 300
+      Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+
+  ENVArchiveObjectsFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVArchiveObjectsFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_ArchiveObjectsFunction-s3-version>
+
+  ENVArchiveProcedureFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_ArchiveProcedureFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri:
+        Bucket: 
+          Ref: S3Bucket
+        Key: lambdas/ENV_ArchiveProcedureFunction.zip
+        Version: <ENV_ArchiveProcedureFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1024
+      Timeout: 300
+      Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+
+  ENVArchiveProcedureFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVArchiveProcedureFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_ArchiveProcedureFunction-s3-version>
+      
+  ENVAudioConverterFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_AudioConverterFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri:
+        Bucket: 
+          Ref: S3Bucket
+        Key: lambdas/ENV_AudioConverterFunction.zip
+        Version: <ENV_AudioConverterFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1024
+      Timeout: 90
+      Role: 'arn:aws:iam::491655376147:role/dev_ThumbnailFunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+
+  ENVAudioConverterFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVAudioConverterFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_AudioConverterFunction-s3-version>
+
   ENVCloudGroupNotification:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-CloudGroupNotification
+      FunctionName: ENV_CloudGroupNotification
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
@@ -107,14 +284,21 @@ Resources:
           Ref: S3Bucket
         Key: lambdas/ENV_CloudGroupNotification.zip
         Version: <ENV_CloudGroupNotification-s3-version>
-      Description: ''
+      Description: Jenkins Dev2 Deployment
       MemorySize: 128
       Timeout: 900
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
+      Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
 
   ENVCloudGroupNotificationVersion:
     Type: Custom::LambdaVersion
@@ -130,7 +314,7 @@ Resources:
   ENVClearExistingExportZip:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-ClearExistingExportZip
+      FunctionName: ENV_ClearExistingExportZip
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri: 
@@ -138,16 +322,21 @@ Resources:
           Ref: S3Bucket
         Key: lambdas/ENV_ClearExistingExportZip.zip
         Version: <ENV_ClearExistingExportZip-s3-version>
-      Description: This is jenkins deployement
-      MemorySize: 1792
-      Timeout: 300
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1664
+      Timeout: 600
+      Role: 'arn:aws:iam::491655376147:role/dev_ClearExistingExportZip'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /ENV/
       Tags:
-        Environment: Dev
+        Environment: Dev2
 
   ENVClearExistingExportZipVersion:
     Type: Custom::LambdaVersion
@@ -160,10 +349,48 @@ Resources:
         Ref: Environment
       Nonce: <ENV_ClearExistingExportZip-S3-version>
   
+  ENVCognitoEmailPostConfirmationFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_CognitoEmailPostConfirmationFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri: 
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_CognitoEmailPostConfirmationFunction.zip
+        Version: <ENV_CognitoEmailPostConfirmationFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1792
+      Timeout: 300
+      Role: 'arn:aws:iam::491655376147:role/dev_CognitoEmailPostConfirmationFunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+
+  ENVCognitoEmailPostConfirmationFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVCognitoEmailPostConfirmationFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_CognitoEmailPostConfirmationFunction-S3-version>
+
   ENVCognitoPreSignupConfirmation:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-CognitoPreSignupConfirmation
+      FunctionName: ENV_CognitoPreSignupConfirmation
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri: 
@@ -171,16 +398,21 @@ Resources:
           Ref: S3Bucket
         Key: lambdas/ENV_CognitoPreSignupConfirmation.zip
         Version: <ENV_CognitoPreSignupConfirmation-s3-version>
-      Description: This is jenkins deployement
+      Description: Jenkins Dev2 Deployment
       MemorySize: 1792
       Timeout: 300
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
+      Role: 'arn:aws:iam::491655376147:role/dev_CognitoEmailPostConfirmationFunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /ENV/
       Tags:
-        Environment: Dev
+        Environment: Dev2
 
   ENVCognitoPreSignupConfirmationVersion:
     Type: Custom::LambdaVersion
@@ -193,10 +425,60 @@ Resources:
         Ref: Environment
       Nonce: <ENV_CognitoPreSignupConfirmation-S3-version>
 
+  ENVCopyRecoveredObjectFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: ENV_CopyRecoveredObjectFunction
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri:
+        Bucket:
+          Ref: S3Bucket
+        Key: lambdas/ENV_CopyRecoveredObjectFunction.zip
+        Version: <ENV_CopyRecoveredObjectFunction-s3-version>
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1024
+      Timeout: 300
+      Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - !<tag:yaml.org,2002:js/undefined> ''
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
+      Environment:
+        Variables:
+          ssm_store: /ENV/
+      Tags:
+        Environment: Dev2
+      
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+
+  #Version: CopyRecoveredObjectFunction-Function
+  ENVCopyRecoveredObjectFunctionVersion:
+    Type: Custom::LambdaVersion
+    Properties:
+      ServiceToken: 
+        Fn::GetAtt: LambdaVersion.Arn
+      FunctionName: 
+        Ref: ENVCopyRecoveredObjectFunction
+      Environment: 
+        Ref: Environment
+      Nonce: <ENV_CopyRecoveredObjectFunction-s3-version>
+
   ENVImageConversion:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV-ImageConversion
+      FunctionName: ENV_ImageConversion
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri: 
@@ -204,18 +486,23 @@ Resources:
           Ref: S3Bucket
         Key: lambdas/ENV_ImageConversion.zip
         Version: <ENV_ImageConversion-s3-version>
-      Description: This is jenkins deployement
-      MemorySize: 1792
-      Timeout: 300
+      Description: Jenkins Dev2 Deployment
+      MemorySize: 1472
+      Timeout: 603
       Layers:
         - ffmpeg_custom_layer_arn
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
+      Role: 'arn:aws:iam::491655376147:role/dev_ThumbnailFunctionRole'
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-005a73d593a28e2a0
+        SubnetIds:
+          - subnet-06a08a7de749cfd7d
+          - subnet-02f8f518e75d79ff5
       Environment:
         Variables:
           ssm_store: /ENV/
       Tags:
-        Environment: Dev
+        Environment: Dev2
 
   ENVImageConversionVersion:
     Type: Custom::LambdaVersion
