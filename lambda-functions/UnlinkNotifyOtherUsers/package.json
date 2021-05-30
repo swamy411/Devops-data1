@@ -1,0 +1,22 @@
+{
+  "name": "UnlinkNotifyOtherUsers",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "snn"
+  },
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "UnlinkNotifyOtherUsers@1.0.0",
+  "_shasum": "cd21509dbcab324cc53409fca1462c204dedf461",
+  "_from": "lambda_functions\\dev-lambdas\\dev_UnlinkNotifyOtherUsers",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_UnlinkNotifyOtherUsers"
+}

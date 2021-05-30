@@ -8,7 +8,7 @@ Parameters:
     Default: dev
   S3Bucket:
     Type: String
-    Default: "devops-test-swamy1"
+    Default: "jenkins-code-build"
   Environment:
     Type: String
     Default: "DEV"
@@ -192,41 +192,6 @@ Resources:
       Environment: 
         Ref: Environment
       Nonce: <ENV_CognitoPreSignupConfirmation-S3-version>
-
-  ENVProcessImage:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV-ProcessImage
-      Handler: index.handler
-      Runtime: nodejs14.x
-      CodeUri: 
-        Bucket:
-          Ref: S3Bucket
-        Key: lambdas/ENV_ProcessImage.zip
-        Version: <ENV_ProcessImage-s3-version>
-      Description: This is jenkins deployement
-      MemorySize: 1792
-      Timeout: 300
-      Layers:
-        - ffmpeg_custom_layer_arn
-      Role: 
-        Fn::GetAtt: [LambdaRole, Arn]
-      Environment:
-        Variables:
-          ssm_store: /ENV/
-      Tags:
-        Environment: Dev
-
-  ENVProcessImageVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVProcessImage
-      Environment: 
-        Ref: Environment
-      Nonce: <ENV_ProcessImage-S3-version>
 
   ENVImageConversion:
     Type: 'AWS::Serverless::Function'

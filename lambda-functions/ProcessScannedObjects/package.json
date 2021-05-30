@@ -1,0 +1,22 @@
+{
+  "name": "ProcessScannedObjects",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "snn"
+  },
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "ProcessScannedObjects@1.0.0",
+  "_shasum": "a0bd66d7c3a2bcca8d60984748ed56a0bd9858b1",
+  "_from": "lambda_functions\\dev-lambdas\\dev_ProcessScannedObjects",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_ProcessScannedObjects"
+}

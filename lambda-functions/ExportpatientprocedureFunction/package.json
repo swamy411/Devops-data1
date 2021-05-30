@@ -1,0 +1,22 @@
+{
+  "name": "ExportpatientprocedureFunction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-s3-zipper": "^1.2.0",
+    "aws-sdk": "^2.618.0",
+    "moment-timezone": "^0.5.27"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "ExportpatientprocedureFunction@1.0.0",
+  "_shasum": "4aa465429d1c778b33d8409ad518c4e41fa18bfe",
+  "_from": "lambda_functions\\dev-lambdas\\dev_ExportpatientprocedureFunction",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_ExportpatientprocedureFunction"
+}

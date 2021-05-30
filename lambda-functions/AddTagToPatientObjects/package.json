@@ -1,0 +1,22 @@
+{
+  "name": "AddTagToPatientObjects",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "snn"
+  },
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "AddTagToPatientObjects@1.0.0",
+  "_shasum": "c8196882cbf602b7bac3bdb452835b932f95cb7f",
+  "_from": "lambda_functions\\dev-lambdas\\dev_AddTagToPatientObjects",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_AddTagToPatientObjects"
+}

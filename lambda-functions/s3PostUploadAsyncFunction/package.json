@@ -1,0 +1,22 @@
+{
+  "name": "s3PostUploadAsyncFunction",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "snn"
+  },
+  "license": "ISC",
+  "readme": "ERROR: No README data found!",
+  "_id": "s3PostUploadAsyncFunction@1.0.0",
+  "_shasum": "d5c8726a7e41052286888b5c6910448e44bd580c",
+  "_from": "lambda_functions\\dev-lambdas\\dev_s3PostUploadAsyncFunction",
+  "_resolved": "file:lambda_functions\\dev-lambdas\\dev_s3PostUploadAsyncFunction"
+}
