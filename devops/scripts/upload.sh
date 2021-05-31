@@ -21,14 +21,14 @@ sed -i "s/ffmpeg_custom_layer_arn/${Layer_Arn}/g" "${CI_PROJECT_DIR}/devops/clou
 
 # Update Lambda S3 Version in CF Template
 echo "uploading script-.--............"
-cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+cd "${CI_PROJECT_DIR}/lambda-functions" || exit
 echo $(pwd)
 echo $(ls)
 #lambdas_list=$( ls -d */ | grep "lambda-" | cut -d / -f1 )
 lambdas_list=$( ls )
 for lambda in ${lambdas_list[@]};
 do
-    VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "lambdas/${STAGE}_${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
+    VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "${STAGE}_lambdas/${STAGE}_${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
     
     echo "$lambda : $VERSION_ID"
     sed -i "s/<${STAGE}_${lambda}-s3-version>/${VERSION_ID}/g" "${CI_PROJECT_DIR}/devops/cloudformation/lambdas.yaml"
