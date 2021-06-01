@@ -375,7 +375,7 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVVideoConversion:
+  ENVVideoConversionVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
@@ -597,17 +597,17 @@ Resources:
         Ref: Environment
       Nonce: <ENV_TerminationAutoApproval-s3-version>
 
-  ENVSurveyResponseFunction:
+  ENVSurveyResponse:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_SurveyResponseFunction
+      FunctionName: ENV_SurveyResponse
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_SurveyResponseFunction.zip
-        Version: <ENV_SurveyResponseFunction-s3-version>
+        Key: ENV_lambdas/ENV_SurveyResponse.zip
+        Version: <ENV_SurveyResponse-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 1024
       Timeout: 303
@@ -624,16 +624,16 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVSurveyResponseFunctionVersion:
+  ENVSurveyResponseVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: ENVSurveyResponseFunction
+        Ref: ENVSurveyResponse
       Environment: 
         Ref: Environment
-      Nonce: <ENV_SurveyResponseFunction-s3-version>
+      Nonce: <ENV_SurveyResponse-s3-version>
 
   ENVsubscriptionterminationscheduler:
     Type: 'AWS::Serverless::Function'
@@ -678,48 +678,48 @@ Resources:
         Ref: Environment
       Nonce: <ENV_subscriptionterminationscheduler-s3-version>
 
-  ENVSubscriptionSyncronizationFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV_SubscriptionSyncronizationFunction
-      Handler: index.handler
-      Runtime: nodejs14.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: ENV_lambdas/ENV_SubscriptionSyncronizationFunction.zip
-        Version: <ENV_SubscriptionSyncronizationFunction-s3-version>
-      Description: Jenkins Dev2 Deployment
-      MemorySize: 2048
-      Timeout: 900
-      Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
-      Events:
-        Schedule1:
-          Type: Schedule
-          Properties:
-            Schedule: rate(30 minutes)
-      VpcConfig:
-        SecurityGroupIds:
-          - sg-005a73d593a28e2a0
-        SubnetIds:
-          - subnet-06a08a7de749cfd7d
-          - subnet-02f8f518e75d79ff5
-      Environment:
-        Variables:
-          ssm_store: /ENV/
-      Tags:
-        Environment: Dev2
+  # ENVSubscriptionSyncronizationFunction:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV_SubscriptionSyncronizationFunction
+  #     Handler: index.handler
+  #     Runtime: nodejs14.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: ENV_lambdas/ENV_SubscriptionSyncronizationFunction.zip
+  #       Version: <ENV_SubscriptionSyncronizationFunction-s3-version>
+  #     Description: Jenkins Dev2 Deployment
+  #     MemorySize: 2048
+  #     Timeout: 900
+  #     Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
+  #     Events:
+  #       Schedule1:
+  #         Type: Schedule
+  #         Properties:
+  #           Schedule: rate(30 minutes)
+  #     VpcConfig:
+  #       SecurityGroupIds:
+  #         - sg-005a73d593a28e2a0
+  #       SubnetIds:
+  #         - subnet-06a08a7de749cfd7d
+  #         - subnet-02f8f518e75d79ff5
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /ENV/
+  #     Tags:
+  #       Environment: Dev2
 
-  ENVSubscriptionSyncronizationFunction:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVSubscriptionSyncronizationFunction
-      Environment: 
-        Ref: Environment
-      Nonce: <ENV_SubscriptionSyncronizationFunction-s3-version>
+  # ENVSubscriptionSyncronizationFunctionVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVSubscriptionSyncronizationFunction
+  #     Environment: 
+  #       Ref: Environment
+  #     Nonce: <ENV_SubscriptionSyncronizationFunction-s3-version>
 
   ENVSubscriptionExpiryEmailSMSNotification:
     Type: 'AWS::Serverless::Function'
@@ -753,7 +753,7 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVSubscriptionExpiryEmailSMSNotification:
+  ENVSubscriptionExpiryEmailSMSNotificationVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
@@ -774,7 +774,7 @@ Resources:
         Bucket: 
           Ref: S3Bucket
         Key: ENV_lambdas/ENV_SMSGroupNotification.zip
-        Version: <ENV_CloudGroupNotification-s3-version>
+        Version: <ENV_SMSGroupNotification-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 128
       Timeout: 900
@@ -802,17 +802,17 @@ Resources:
         Ref: Environment
       Nonce: <ENV_SMSGroupNotification-s3-version>
 
-  ENVSendSurveyToPatientFunction:
+  ENVSendSurveyToPatient:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_SendSurveyToPatientFunction
+      FunctionName: ENV_SendSurveyToPatient
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_SendSurveyToPatientFunction.zip
-        Version: <ENV_SendSurveyToPatientFunction-s3-version>
+        Key: ENV_lambdas/ENV_SendSurveyToPatient.zip
+        Version: <ENV_SendSurveyToPatient-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 128
       Timeout: 3
@@ -829,16 +829,16 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVSendSurveyToPatientFunctionVersion:
+  ENVSendSurveyToPatientVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: ENVSendSurveyToPatientFunction
+        Ref: ENVSendSurveyToPatient
       Environment: 
         Ref: Environment
-      Nonce: <ENV_SendSurveyToPatientFunction-s3-version>
+      Nonce: <ENV_SendSurveyToPatient-s3-version>
 
   ENVSendGroupNotification:
     Type: 'AWS::Serverless::Function'
@@ -886,14 +886,14 @@ Resources:
   ENVSendDataToSurgeonEmail:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_SendDataToSurgeonEmail
+      FunctionName: ENV_SendDataToSurgeon_Email
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_SendDataToSurgeonEmail.zip
-        Version: <ENV_SendDataToSurgeonEmail-s3-version>
+        Key: ENV_lambdas/ENV_SendDataToSurgeon_Email.zip
+        Version: <ENV_SendDataToSurgeon_Email-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 2304
       Timeout: 900
@@ -919,7 +919,7 @@ Resources:
         Ref: ENVSendDataToSurgeonEmail
       Environment: 
         Ref: Environment
-      Nonce: <ENV_SendDataToSurgeonEmail-s3-version>
+      Nonce: <ENV_SendDataToSurgeon_Email-s3-version>
 
   ENVSendDataToSurgeon:
     Type: 'AWS::Serverless::Function'
@@ -1364,17 +1364,17 @@ Resources:
         Ref: Environment
       Nonce: <ENV_ProcessScannedObjects-s3-version>
 
-  ENVprocessarchivemsgFunction:
+  ENVProcessArchiveMsgFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_processarchivemsgFunction
+      FunctionName: ENV_process-archive-msg_function
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_processarchivemsgFunction.zip
-        Version: <ENV_processarchivemsgFunction-s3-version>
+        Key: ENV_lambdas/ENV_process-archive-msg_function.zip
+        Version: <ENV_process-archive-msg_function-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 2048
       Timeout: 603
@@ -1403,16 +1403,16 @@ Resources:
     Type: 'AWS::SQS::Queue'
     Properties: {}
 
-  ENVprocessarchivemsgFunctionVersion:
+  ENVProcessArchiveMsgFunctionVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
         Fn::GetAtt: LambdaVersion.Arn
       FunctionName: 
-        Ref: ENVprocessarchivemsgFunction
+        Ref: ENVProcessArchiveMsgFunction
       Environment: 
         Ref: Environment
-      Nonce: <ENV_processarchivemsgFunction-s3-version>
+      Nonce: <ENV_process-archive-msg_function-s3-version>
 
   ENVmigrationScript:
     Type: 'AWS::Serverless::Function'
@@ -1528,64 +1528,64 @@ Resources:
         Ref: Environment
       Nonce: <ENV_LambdaEdge-s3-version>
 
-  ENVlambdaAuthorizer:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      FunctionName: ENV_lambdaAuthorizer
-      Handler: index.handler
-      Runtime: nodejs14.x
-      CodeUri:
-        Bucket: 
-          Ref: S3Bucket
-        Key: ENV_lambdas/ENV_lambdaAuthorizer.zip
-        Version: <ENV_lambdaAuthorizer-s3-version>
-      Description: Jenkins Dev2 Deployment
-      MemorySize: 1216
-      Timeout: 3
-      Role: arn:aws:iam::491655376147:role/dev_CognitoEmailPostConfirmationFunctionRole
-      Events:
-        Api1:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api2:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api3:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api4:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-      VpcConfig:
-        SecurityGroupIds:
-          - sg-005a73d593a28e2a0
-        SubnetIds:
-          - subnet-06a08a7de749cfd7d
-          - subnet-02f8f518e75d79ff5
-      Environment:
-        Variables:
-          ssm_store: /ENV/
-      Tags:
-        Environment: Dev2
+  # ENVlambdaAuthorizer:
+  #   Type: 'AWS::Serverless::Function'
+  #   Properties:
+  #     FunctionName: ENV_lambdaAuthorizer
+  #     Handler: index.handler
+  #     Runtime: nodejs14.x
+  #     CodeUri:
+  #       Bucket: 
+  #         Ref: S3Bucket
+  #       Key: ENV_lambdas/ENV_lambdaAuthorizer.zip
+  #       Version: <ENV_lambdaAuthorizer-s3-version>
+  #     Description: Jenkins Dev2 Deployment
+  #     MemorySize: 1216
+  #     Timeout: 3
+  #     Role: arn:aws:iam::491655376147:role/dev_CognitoEmailPostConfirmationFunctionRole
+  #     Events:
+  #       Api1:
+  #         Type: Api
+  #         Properties:
+  #           Path: /MyResource
+  #           Method: ANY
+  #       Api2:
+  #         Type: Api
+  #         Properties:
+  #           Path: /MyResource
+  #           Method: ANY
+  #       Api3:
+  #         Type: Api
+  #         Properties:
+  #           Path: /MyResource
+  #           Method: ANY
+  #       Api4:
+  #         Type: Api
+  #         Properties:
+  #           Path: /MyResource
+  #           Method: ANY
+  #     VpcConfig:
+  #       SecurityGroupIds:
+  #         - sg-005a73d593a28e2a0
+  #       SubnetIds:
+  #         - subnet-06a08a7de749cfd7d
+  #         - subnet-02f8f518e75d79ff5
+  #     Environment:
+  #       Variables:
+  #         ssm_store: /ENV/
+  #     Tags:
+  #       Environment: Dev2
 
-  ENVlambdaAuthorizerVersion:
-    Type: Custom::LambdaVersion
-    Properties:
-      ServiceToken: 
-        Fn::GetAtt: LambdaVersion.Arn
-      FunctionName: 
-        Ref: ENVlambdaAuthorizer
-      Environment: 
-        Ref: Environment
-      Nonce: <ENV_lambdaAuthorizer-s3-version>
+  # ENVlambdaAuthorizerVersion:
+  #   Type: Custom::LambdaVersion
+  #   Properties:
+  #     ServiceToken: 
+  #       Fn::GetAtt: LambdaVersion.Arn
+  #     FunctionName: 
+  #       Ref: ENVlambdaAuthorizer
+  #     Environment: 
+  #       Ref: Environment
+  #     Nonce: <ENV_lambdaAuthorizer-s3-version>
 
   ENVJavaS3ZipperFunction:
     Type: 'AWS::Serverless::Function'
@@ -1692,7 +1692,7 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVImageThumbnailerFunction:
+  ENVImageThumbnailerFunctionVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
@@ -1768,7 +1768,7 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVExportDeviceBlobFunction:
+  ENVExportDeviceBlobFunctionVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
@@ -1782,14 +1782,14 @@ Resources:
   ENVExportDeviceBlobZipFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_ExportDeviceBlobZipFunction
+      FunctionName: ENV_ExportDeviceBlob_ZipFunction
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_ExportDeviceBlobZipFunction.zip
-        Version: <ENV_ExportDeviceBlobZipFunction-s3-version>
+        Key: ENV_lambdas/ENV_ExportDeviceBlob_ZipFunction.zip
+        Version: <ENV_ExportDeviceBlob_ZipFunction-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 1024
       Timeout: 300
@@ -1815,7 +1815,7 @@ Resources:
         Ref: ENVExportDeviceBlobZipFunction
       Environment: 
         Ref: Environment
-      Nonce: <ENV_ExportDeviceBlobZipFunction-s3-version>
+      Nonce: <ENV_ExportDeviceBlob_ZipFunction-s3-version>
 
   ENVEmailGroupNotification:
     Type: 'AWS::Serverless::Function'
@@ -1896,14 +1896,14 @@ Resources:
   ENVDeleteSurgeonDataByProcedureFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_DeleteSurgeonDataByProcedureFunction
+      FunctionName: ENV_DeleteSurgeonDataByProcedure
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_DeleteSurgeonDataByProcedureFunction.zip
-        Version: <ENV_DeleteSurgeonDataByProcedureFunction-s3-version>
+        Key: ENV_lambdas/ENV_DeleteSurgeonDataByProcedure.zip
+        Version: <ENV_DeleteSurgeonDataByProcedure-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 1024
       Timeout: 303
@@ -1929,19 +1929,19 @@ Resources:
         Ref: ENVDeleteSurgeonDataByProcedureFunction
       Environment: 
         Ref: Environment
-      Nonce: <ENV_DeleteSurgeonDataByProcedureFunction-s3-version>
+      Nonce: <ENV_DeleteSurgeonDataByProcedure-s3-version>
 
   ENVDeleteS3GlacierDataForSurgeonFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_DeleteS3GlacierDataForSurgeonFunction
+      FunctionName: ENV_Delete_S3GlacierDataForSurgeon
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_DeleteS3GlacierDataForSurgeonFunction.zip
-        Version: <ENV_DeleteS3GlacierDataForSurgeonFunction-s3-version>
+        Key: ENV_lambdas/ENV_Delete_S3GlacierDataForSurgeon.zip
+        Version: <ENV_Delete_S3GlacierDataForSurgeon-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 1088
       Timeout: 603
@@ -1967,19 +1967,19 @@ Resources:
         Ref: ENVDeleteS3GlacierDataForSurgeonFunction
       Environment: 
         Ref: Environment
-      Nonce: <ENV_DeleteS3GlacierDataForSurgeonFunction-s3-version>
+      Nonce: <ENV_Delete_S3GlacierDataForSurgeon-s3-version>
 
   ENVCopySurgeonDataByProcedureFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: ENV_CopySurgeonDataByProcedureFunction
+      FunctionName: ENV_CopySurgeonDataByProcedure
       Handler: index.handler
       Runtime: nodejs14.x
       CodeUri:
         Bucket: 
           Ref: S3Bucket
-        Key: ENV_lambdas/ENV_CopySurgeonDataByProcedureFunction.zip
-        Version: <ENV_CopySurgeonDataByProcedureFunction-s3-version>
+        Key: ENV_lambdas/ENV_CopySurgeonDataByProcedure.zip
+        Version: <ENV_CopySurgeonDataByProcedure-s3-version>
       Description: Jenkins Dev2 Deployment
       MemorySize: 1024
       Timeout: 303
@@ -1996,7 +1996,7 @@ Resources:
       Tags:
         Environment: Dev2
 
-  ENVCopySurgeonDataByProcedureFunction:
+  ENVCopySurgeonDataByProcedureFunctionVersion:
     Type: Custom::LambdaVersion
     Properties:
       ServiceToken: 
@@ -2005,7 +2005,7 @@ Resources:
         Ref: ENVCopySurgeonDataByProcedureFunction
       Environment: 
         Ref: Environment
-      Nonce: <ENV_CopySurgeonDataByProcedureFunction-s3-version>
+      Nonce: <ENV_CopySurgeonDataByProcedure-s3-version>
 
   ENVCopyRestoredProcedureFunction:
     Type: 'AWS::Serverless::Function'
@@ -2022,14 +2022,14 @@ Resources:
       MemorySize: 1024
       Timeout: 600
       Role: 'arn:aws:iam::491655376147:role/dev_SendDataToPatient_FunctionRole'
-      Events:
-        BucketEvent1:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: Bucket1
-            Events:
-              - !<tag:yaml.org,2002:js/undefined> ''
+      # Events:
+      #   BucketEvent1:
+      #     Type: S3
+      #     Properties:
+      #       Bucket:
+      #         Ref: Bucket1
+      #       Events:
+      #         - !<tag:yaml.org,2002:js/undefined> ''
       VpcConfig:
         SecurityGroupIds:
           - sg-005a73d593a28e2a0
