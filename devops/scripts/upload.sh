@@ -23,7 +23,7 @@ echo "Uploading Artifacts"
 
 # Update Lambda S3 Version in CF Template
 echo "uploading script-.--............"
-cd "${CI_PROJECT_DIR}/lambda_functions" || exit
+cd "${CI_PROJECT_DIR}/lambda_functions/${STAGE}-lambdas" || exit
 echo $(pwd)
 echo $(ls)
 #lambdas_list=$( ls -d */ | grep "lambda-" | cut -d / -f1 )
