@@ -30,7 +30,9 @@ echo $(ls)
 lambdas_list=$( ls )
 for lambda in ${lambdas_list[@]};
 do
-    # VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "${STAGE}_lambdas/${STAGE}_${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
+    VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "${STAGE}_lambdas/${STAGE}_${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
+    echo "$lambda : $VERSION_ID"
+
     SIGNED_URL=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws s3 presign s3://${S3_BUCKET}/${STAGE}_lambdas/${STAGE}_${lambda}.zip  --expires-in 250000)
     
 
