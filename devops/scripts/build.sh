@@ -55,7 +55,7 @@ compile_lambdas() {
     echo $@
     echo "SRC PATH @ : ${src_path[@]}"
     echo $(pwd)
-    ListDir=$(ls ${CI_PROJECT_DIR}/lambda-functions)
+    ListDir=$(ls ${CI_PROJECT_DIR}/lambda_functions)
     echo "List Dir:-- ${ListDir[@]}"
     cd "${CI_PROJECT_DIR}" || exit
     for folder in ${src_path[@]}; 
@@ -72,10 +72,10 @@ compile_lambdas() {
         #     deploy_ffmpeg
         # else
             echo "Folder Name :--- ${folder}"
-            cd "${CI_PROJECT_DIR}/lambda-functions/$folder" || continue
+            cd "${CI_PROJECT_DIR}/lambda_functions/$folder" || continue
             npm install
 
-            echo $(ls ${CI_PROJECT_DIR}/lambda-functions/$folder)
+            echo $(ls ${CI_PROJECT_DIR}/lambda_functions/$folder)
             echo "Packaging Lambda Artifacts"
             mkdir -p "${CI_PROJECT_DIR}/artifacts/${STAGE}_lambdas"
             "C:\Program Files\WinRAR\WinRAR.exe" a -afzip -r -y "${CI_PROJECT_DIR}/artifacts/${STAGE}_lambdas/${STAGE}_${folder}.zip" .
@@ -88,7 +88,7 @@ compile_lambdas() {
 if [ "$build_all_lambdas" = true ] ; then
     # deploy_ffmpeg
     echo 'Building All Lambdas'
-    cd "${CI_PROJECT_DIR}/lambda-functions" || exit
+    cd "${CI_PROJECT_DIR}/lambda_functions" || exit
     LAMBDAS=$( ls )
     compile_lambdas "${LAMBDAS[@]}"
 else
