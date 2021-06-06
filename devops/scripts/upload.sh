@@ -33,6 +33,10 @@ do
     VERSION_ID=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3api put-object-tagging --bucket "${S3_BUCKET}" --key "${STAGE}_lambdas/${STAGE}_${lambda}.zip" --tagging 'TagSet=[{Key=lambda,Value=getVersion}]' --output text)
     
     echo "$lambda : $VERSION_ID"
+
+    SIGNED_URL=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws s3 presign s3://${S3_BUCKET}/${STAGE}_lambdas/${STAGE}_${lambda}.zip --expires-in 250000)
+    echo "$lambda : $SIGNED_URL"
+
     sed -i "s/<${STAGE}_${lambda}-s3-version>/${VERSION_ID}/g" "${CI_PROJECT_DIR}/devops/${STAGE}_cloudformation/${STAGE}_lambdas.yaml"
     
 done;
