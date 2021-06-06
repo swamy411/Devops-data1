@@ -34,13 +34,13 @@ do
     
     echo "$lambda : $VERSION_ID"
 
-    SIGNED_URL=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" aws s3 presign s3://${S3_BUCKET}/${STAGE}_lambdas/${STAGE}_${lambda}.zip --expires-in 250000)
+    SIGNED_URL=$("C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3 presign s3://${S3_BUCKET}/${STAGE}_lambdas/${STAGE}_${lambda}.zip --expires-in 250000)
     echo "$lambda : $SIGNED_URL"
 
     sed -i "s/<${STAGE}_${lambda}-s3-version>/${VERSION_ID}/g" "${CI_PROJECT_DIR}/devops/${STAGE}_cloudformation/${STAGE}_lambdas.yaml"
     
 done;
 # uploading sam template file to S3....
-"C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3 cp "${CI_PROJECT_DIR}/devops/${STAGE}_cloudformation/" "s3://${TEMPLATE_S3_BUCKET}/" --recursive
+# "C:\Program Files\Amazon\AWSCLIV2\aws.exe" s3 cp "${CI_PROJECT_DIR}/devops/${STAGE}_cloudformation/" "s3://${TEMPLATE_S3_BUCKET}/" --recursive
 # echo "Uploading cloudformation files"
 # aws s3 cp "${CI_PROJECT_DIR}/devops/cloudformation/" "s3://${S3_BUCKET}/" --recursive
