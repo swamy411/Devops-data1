@@ -19,7 +19,7 @@
 // }
 node( 'some_node' ) {
   stage( "Phase 1" ) {
-    sshagent( credentials: [ 'some_creds' ] ) {
+    sshagent( credentials: [ 'git@github.com:swamy411/Devops-data1.git' ] ) {
       checkout scm
       def lastSuccessfulCommit = getLastSuccessfulCommit()
       def currentCommit = commitHashForBuild( currentBuild.rawBuild )
