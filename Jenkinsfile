@@ -5,7 +5,7 @@ pipeline {
       steps {
         script {
             checkout([ $class: 'GitSCM', 
-            branches: [[name: '*/25_05_2021']], 
+            branches: [[name: '*/master']], 
             doGenerateSubmoduleConfigurations: false, 
             extensions: [[
                 $class: 'MessageExclusion', excludedMessage: '.*skip-?ci.*'
